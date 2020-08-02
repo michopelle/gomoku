@@ -1,0 +1,14 @@
+.row {
+  width: 750px !important;
+  height: 50px !important;
+  margin-left: 0;
+  margin-left: 0;
+}
+
+.col {
+  width: 50px !important;
+  height: 50px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
