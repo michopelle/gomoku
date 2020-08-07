@@ -3,6 +3,7 @@ import React from "react";
 import Board from "./Board";
 import UndoRedo from "../containers/UndoRedo";
 import "./App.css";
+import WinSide from "./WinSide";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
             <Board />
           </div>
           <UndoRedo />
+          <WinSide />
           {/* <div className="col-4">
             <Board />
           </div> */}

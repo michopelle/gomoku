@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import "./Board.css";
-import { chestMove } from "../actions";
+import { chestMoveAndWinSide } from "../actions";
 
 class Board extends React.Component {
   renderedList() {
@@ -16,7 +16,7 @@ class Board extends React.Component {
                   className="col"
                   key={(indexChestList, indexChest)}
                   onClick={() =>
-                    this.props.chestMove(
+                    this.props.chestMoveAndWinSide(
                       indexChestList, // positionX
                       indexChest, // positionY
                       this.props.side
@@ -51,4 +51,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { chestMove })(Board);
+export default connect(mapStateToProps, { chestMoveAndWinSide })(Board);
