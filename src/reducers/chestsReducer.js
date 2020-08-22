@@ -18,6 +18,9 @@ const chests = (state = initialState, action) => {
           ? el.map((ele, i) => (i === parseInt(positionY) ? side : ele))
           : el
       );
+    case "UPDATE_FROM_FIREBASE":
+      console.log("update", action.payload.chests.present);
+      return action.payload.chests.present;
 
     default:
       return state;

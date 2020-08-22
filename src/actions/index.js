@@ -29,3 +29,14 @@ const winSide = (positionX, positionY, side, chests) => {
     },
   };
 };
+
+export const updateData = (chests, side, winSide) => {
+  return {
+    type: "UPDATE_FROM_FIREBASE",
+    payload: {
+      chests: chests,
+      side: side,
+      winSide: winSide,
+    },
+  };
+};

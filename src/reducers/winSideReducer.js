@@ -81,7 +81,7 @@ const directions = [
   ],
 ];
 
-export default (state = null, action) => {
+export default (state = "HI", action) => {
   switch (action.type) {
     case "WIN_SIDE":
       return checkCondition(action.payload) ? action.payload.side : false;

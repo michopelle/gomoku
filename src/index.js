@@ -6,12 +6,15 @@ import thunk from "redux-thunk";
 
 import App from "./components/App";
 import reducers from "./reducers";
+import FirebaseProvider from "./firebase/firebase";
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <FirebaseProvider>
+      <App />
+    </FirebaseProvider>
   </Provider>,
   document.querySelector("#root")
 );
