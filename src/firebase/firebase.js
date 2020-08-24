@@ -56,7 +56,8 @@ export default ({ children }) => {
   // store.subscribe(() => uploadReducers(store.getState(), firebase.database));
 
   // fromDb
-  function downloadReducers(db, dispatch) {
+  function downloadReducers(db) {
+    console.log("read");
     // This method is triggered once when the listener is attached
     // and again every time the data, including children, changes.
     db.ref().on("value", (snapshot) => {
@@ -64,11 +65,11 @@ export default ({ children }) => {
         const { chests, side, winSide } = snapshot.val();
         console.log(snapshot.val());
         console.log(updateData);
-        dispatch(updateData(chests, side, winSide));
+        // dispatch(updateData(chests, side, winSide));
       }
     });
   }
-  downloadReducers(firebase.database, dispatch);
+  // downloadReducers(firebase.database, dispatch);
 
   return (
     <FirebaseContext.Provider value={firebase}>

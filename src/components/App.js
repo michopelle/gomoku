@@ -5,7 +5,7 @@ import UndoRedo from "../containers/UndoRedo";
 import "./App.css";
 import WinSide from "./WinSide";
 import { FirebaseContext } from "../firebase/firebase";
-import { useSelector, useStore } from "react-redux";
+import { ReactReduxContext, useSelector, useStore } from "react-redux";
 
 const App = () => {
   const { api, database } = useContext(FirebaseContext);
@@ -15,7 +15,7 @@ const App = () => {
   const winSide = useSelector((state) => state.winSide);
 
   const store = useStore();
-  store.subscribe(() => api.uploadReducers(store.getState(), database));
+  // store.subscribe(() => api.uploadReducers(store.getState(), database));
 
   // Same as componentDidMount, to upload all reducers to firebase
   // when the App has been redendered
@@ -28,7 +28,15 @@ const App = () => {
       <div className="table table-borderless">
         <div className="">
           <div className="Board">
-            <Board />
+            <ReactReduxContext.Consumer>
+              {({ store }) => (
+                <FirebaseContext.Consumer>
+                  {({ api, database }) => (
+                    <Board store={store} api={api} database={database} />
+                  )}
+                </FirebaseContext.Consumer>
+              )}
+            </ReactReduxContext.Consumer>
           </div>
           <UndoRedo />
           <WinSide />

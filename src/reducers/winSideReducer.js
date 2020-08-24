@@ -1,4 +1,5 @@
 const isSameSide = (testPositionX, testPositionY, side, chests) => {
+  console.log(testPositionX, testPositionY, side, chests);
   if (
     testPositionX > 14 ||
     testPositionY > 14 ||
@@ -84,69 +85,11 @@ const directions = [
 export default (state = "HI", action) => {
   switch (action.type) {
     case "WIN_SIDE":
+      console.log(action.payload);
       return checkCondition(action.payload) ? action.payload.side : false;
+    case "UPDATE_FROM_FIREBASE":
+      return action.payload.winSide;
     default:
       return state;
   }
 };
-
-// const directions = {
-//   vertical: {
-//     negative: [
-//       [-1, 0],
-//       [-2, 0],
-//       [-3, 0],
-//       [-4, 0],
-//     ],
-//     positive: [
-//       [1, 0],
-//       [2, 0],
-//       [3, 0],
-//       [4, 0],
-//     ],
-//   },
-//   horizontal: {
-//     negative: [
-//       [0, -1],
-//       [0, -2],
-//       [0, -3],
-//       [0, -4],
-//     ],
-//     true: [
-//       [0, 1],
-//       [0, 2],
-//       [0, 3],
-//       [0, 4],
-//     ],
-//   },
-//   diagonalUpperLeft: {
-//     //diagonal that starts from upper left cornor
-//     negative: [
-//       [-1, -1],
-//       [-2, -2],
-//       [-3, -3],
-//       [-4, -4],
-//     ],
-//     positive: [
-//       [1, 1],
-//       [2, 2],
-//       [3, 3],
-//       [4, 4],
-//     ],
-//   },
-//   diagonalLowerLeft: {
-//     //diagonal that starts from Lower left cornor
-//     negative: [
-//       [1, -1],
-//       [2, -2],
-//       [3, -3],
-//       [4, -4],
-//     ],
-//     positive: [
-//       [-1, 1],
-//       [-2, 2],
-//       [-3, 3],
-//       [-4, 4],
-//     ],
-//   },
-// };

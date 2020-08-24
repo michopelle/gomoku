@@ -1,21 +1,23 @@
 import React from "react";
-import { connect, useStore } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 
 import "./Board.css";
-import { chestMoveAndWinSide } from "../actions";
-import { FirebaseContext } from "../firebase/firebase";
+import { chestMoveAndWinSide, updateData } from "../actions";
 
 class Board extends React.Component {
-  store = useStore();
-  static contextType = FirebaseContext;
-  shouldComponentUpdate() {
-    let { api, database } = this.context;
-    this.store.subscribe(() =>
-      api.uploadReducers(this.store.getState(), database)
-    );
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props !== nextProps;
   }
 
-  // downloadReducers = useContext(FirebaseContext).api.downloadReducers();
+  componentDidMount() {
+    this.props.store.subscribe(() =>
+      this.props.api.uploadReducers(
+        this.props.store.getState(),
+        this.props.database
+      )
+    );
+    // this.props.api.downloadReducers(this.props.database);
+  }
 
   renderedList() {
     console.log(this.props.chests);
@@ -24,18 +26,17 @@ class Board extends React.Component {
         <div className="row" key={indexChestList}>
           {chestList.map((chest, indexChest) => {
             if (this.props.chests[indexChestList][indexChest] === "") {
+              console.log(indexChestList);
               return (
                 <div
                   className="col"
                   key={(indexChestList, indexChest)}
-                  onClick={
-                    (indexChestList, indexChest) =>
-                      this.props.chestMoveAndWinSide(
-                        indexChestList, // positionX
-                        indexChest, // positionY
-                        this.props.side
-                      )
-                    // this.onChestClick(event, indexChestList, indexChest)
+                  onClick={(indexChestList, indexChest) =>
+                    this.props.chestMoveAndWinSide(
+                      indexChestList, // positionX
+                      indexChest, // positionY
+                      this.props.side
+                    )
                   }
                 >
                   {chest}
@@ -66,4 +67,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { chestMoveAndWinSide })(Board);
+export default connect(mapStateToProps, { chestMoveAndWinSide, updateData })(
+  Board
+);
