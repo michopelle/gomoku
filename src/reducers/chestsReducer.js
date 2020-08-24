@@ -19,7 +19,7 @@ const chests = (state = initialState, action) => {
           : el
       );
     case "UPDATE_FROM_FIREBASE":
-      console.log("update", action.payload.chests.present);
+      // console.log("update", action.payload.chests.present);
       return action.payload.chests.present;
 
     default:

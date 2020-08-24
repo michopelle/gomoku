@@ -9,35 +9,39 @@ class Board extends React.Component {
     return this.props !== nextProps;
   }
 
-  componentDidMount() {
-    this.props.store.subscribe(() =>
-      this.props.api.uploadReducers(
-        this.props.store.getState(),
-        this.props.database
-      )
-    );
-    // this.props.api.downloadReducers(this.props.database);
-  }
+  // componentDidMount() {
+  //   this.props.store.subscribe(() =>
+  //     this.props.api.uploadReducers(
+  //       this.props.store.getState(),
+  //       this.props.database
+  //     )
+  //   );
+  //   // this.props.api.downloadReducers(this.props.database);
+  // }
 
   renderedList() {
-    console.log(this.props.chests);
+    // console.log(this.props.chests);
     return this.props.chests.map((chestList, indexChestList) => {
       return (
         <div className="row" key={indexChestList}>
           {chestList.map((chest, indexChest) => {
             if (this.props.chests[indexChestList][indexChest] === "") {
-              console.log(indexChestList);
+              // console.log(indexChestList);
               return (
                 <div
                   className="col"
                   key={(indexChestList, indexChest)}
-                  onClick={(indexChestList, indexChest) =>
+                  onClick={() => {
                     this.props.chestMoveAndWinSide(
                       indexChestList, // positionX
                       indexChest, // positionY
                       this.props.side
-                    )
-                  }
+                    );
+                    this.props.api.uploadReducers(
+                      this.props.store.getState(),
+                      this.props.database
+                    );
+                  }}
                 >
                   {chest}
                 </div>
