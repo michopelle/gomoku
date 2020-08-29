@@ -1,11 +1,8 @@
 export const chestMoveAndWinSide = (positionX, positionY, side) => {
-  // console.log("chestMoveAndWinSide");
-  // console.log(positionX);
   return async (dispatch, getState) => {
     await dispatch(chestMove(positionX, positionY, side));
 
     const { chests } = getState();
-    // console.log(positionX);
     dispatch(winSide(positionX, positionY, side, chests));
   };
 };
@@ -34,7 +31,6 @@ const winSide = (positionX, positionY, side, chests) => {
 };
 
 export const updateData = (chests, side, winSide) => {
-  // console.log("updateData");
   return {
     type: "UPDATE_FROM_FIREBASE",
     payload: {
@@ -42,5 +38,11 @@ export const updateData = (chests, side, winSide) => {
       side: side,
       winSide: winSide,
     },
+  };
+};
+
+export const resetChest = () => {
+  return {
+    type: "RESET_CHEST",
   };
 };

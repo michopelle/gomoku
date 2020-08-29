@@ -1,5 +1,4 @@
 const isSameSide = (testPositionX, testPositionY, side, chests) => {
-  // console.log(testPositionX, testPositionY, side, chests);
   if (
     testPositionX > 14 ||
     testPositionY > 14 ||
@@ -82,13 +81,17 @@ const directions = [
   ],
 ];
 
-export default (state = "HI", action) => {
+export default (state = false, action) => {
   switch (action.type) {
     case "WIN_SIDE":
-      // console.log(action.payload);
       return checkCondition(action.payload) ? action.payload.side : false;
+
     case "UPDATE_FROM_FIREBASE":
       return action.payload.winSide;
+
+    case "RESET_CHEST":
+      return false;
+
     default:
       return state;
   }

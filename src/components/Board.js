@@ -1,54 +1,56 @@
 import React from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
 import "./Board.css";
-import { chestMoveAndWinSide, updateData } from "../actions";
+import { chestMoveAndWinSide } from "../actions";
 
 class Board extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return this.props !== nextProps;
   }
 
-  // componentDidMount() {
-  //   this.props.store.subscribe(() =>
-  //     this.props.api.uploadReducers(
-  //       this.props.store.getState(),
-  //       this.props.database
-  //     )
-  //   );
-  //   // this.props.api.downloadReducers(this.props.database);
-  // }
+  componentDidUpdate() {
+    console.log("update");
+  }
 
+  onChestClick = (_, chestListIndex, chestIndex) => {
+    const { store, api, database, side, winSide, chestMove } = this.props;
+
+    // Disable onClick if there is a winner
+    if (!winSide) {
+      chestMove(
+        chestListIndex, // positionX
+        chestIndex, // positionY
+        side
+      );
+    }
+    // upload to firebase
+    api.uploadReducers(store.getState(), database);
+  };
+
+  // Render the Board based on the
   renderedList() {
-    // console.log(this.props.chests);
-    return this.props.chests.map((chestList, indexChestList) => {
+    const { chests } = this.props;
+
+    return chests.map((chestList, chestListIndex) => {
       return (
-        <div className="row" key={indexChestList}>
-          {chestList.map((chest, indexChest) => {
-            if (this.props.chests[indexChestList][indexChest] === "") {
-              // console.log(indexChestList);
+        <div className="row" key={chestListIndex}>
+          {chestList.map((chest, chestIndex) => {
+            if (chests[chestListIndex][chestIndex] === "") {
               return (
                 <div
                   className="col"
-                  key={(indexChestList, indexChest)}
-                  onClick={() => {
-                    this.props.chestMoveAndWinSide(
-                      indexChestList, // positionX
-                      indexChest, // positionY
-                      this.props.side
-                    );
-                    this.props.api.uploadReducers(
-                      this.props.store.getState(),
-                      this.props.database
-                    );
-                  }}
+                  key={(chestListIndex, chestIndex)}
+                  onClick={(e) =>
+                    this.onChestClick(e, chestListIndex, chestIndex)
+                  }
                 >
                   {chest}
                 </div>
               );
             } else {
               return (
-                <div className="col" key={(indexChestList, indexChest)}>
+                <div className="col" key={(chestListIndex, chestIndex)}>
                   {chest}
                 </div>
               );
@@ -68,9 +70,15 @@ const mapStateToProps = (state) => {
   return {
     chests: state.chests.present,
     side: state.side,
+    winSide: state.winSide,
   };
 };
 
-export default connect(mapStateToProps, { chestMoveAndWinSide, updateData })(
-  Board
-);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    chestMove: (chestListIndex, chestIndex, side) =>
+      dispatch(chestMoveAndWinSide(chestListIndex, chestIndex, side)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);

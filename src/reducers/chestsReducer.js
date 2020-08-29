@@ -1,4 +1,4 @@
-import undoable from "redux-undo";
+import undoable, { includeAction } from "redux-undo";
 
 let initialState = [];
 for (let i = 0; i < 15; i++) {
@@ -18,9 +18,12 @@ const chests = (state = initialState, action) => {
           ? el.map((ele, i) => (i === parseInt(positionY) ? side : ele))
           : el
       );
+
     case "UPDATE_FROM_FIREBASE":
-      // console.log("update", action.payload.chests.present);
       return action.payload.chests.present;
+
+    case "RESET_CHEST":
+      return initialState;
 
     default:
       return state;
@@ -28,7 +31,7 @@ const chests = (state = initialState, action) => {
 };
 
 const undoableChests = undoable(chests, {
-  // filter: distinctState(),
+  filter: includeAction("CHEST_MOVE"),
 });
 
 export default undoableChests;
