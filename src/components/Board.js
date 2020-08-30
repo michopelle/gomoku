@@ -49,9 +49,13 @@ class Board extends React.Component {
                 </div>
               );
             } else {
+              console.log(chests[chestListIndex][chestIndex]);
               return (
                 <div className="col" key={(chestListIndex, chestIndex)}>
-                  {chest}
+                  <img
+                    src={require(`./${chests[chestListIndex][chestIndex]}_chess.png`)}
+                    alt={`${chests[chestListIndex][chestIndex]}_chess`}
+                  />
                 </div>
               );
             }
