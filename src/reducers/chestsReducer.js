@@ -21,6 +21,21 @@ const chests = (state = initialState, action) => {
 
     case "UPDATE_FROM_FIREBASE":
       return action.payload.chests.present;
+    // const { present } = action.payload.move;
+    // console.log("present", present);
+    // // return present.map((indMove) => {
+    // //   console.log(indMove[0]);
+    // //   return state.map((chestList, chestListIndex) => {
+    // //     console.log("chestList", chestList);
+    // //     if (chestListIndex === indMove[0]) {
+    // //       return chestList.map((chest, chestIndex) =>
+    // //         chestIndex === indMove[1] ? indMove[2] : chest
+    // //       );
+    // //     } else {
+    // //       return chestList;
+    // //     }
+    // //   });
+    // // });
 
     case "RESET_CHEST":
       return initialState;

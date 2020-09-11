@@ -10,7 +10,7 @@ class Board extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("update");
+    // console.log("update");
   }
 
   onChestClick = (_, chestListIndex, chestIndex) => {
@@ -31,6 +31,7 @@ class Board extends React.Component {
   // Render the Board based on the
   renderedList() {
     const { chests } = this.props;
+    console.log(chests);
 
     return chests.map((chestList, chestListIndex) => {
       return (
@@ -49,7 +50,7 @@ class Board extends React.Component {
                 </div>
               );
             } else {
-              console.log(chests[chestListIndex][chestIndex]);
+              // console.log(chests[chestListIndex][chestIndex]);
               return (
                 <div className="col" key={(chestListIndex, chestIndex)}>
                   <img

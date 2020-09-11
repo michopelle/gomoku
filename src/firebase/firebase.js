@@ -1,6 +1,7 @@
 import React, { createContext } from "react";
 import firebaseConfig from "./firebaseConfig";
 import app from "firebase/app";
+import "firebase/auth";
 import "firebase/database";
 import { useDispatch } from "react-redux";
 
@@ -30,9 +31,29 @@ export default ({ children }) => {
       api: {
         uploadReducers,
         downloadReducers,
+        doCreateUserWithEmailAndPassword,
+        doSignInWithEmailAndPassword,
       },
     };
   }
+
+  // *** Auth API ***
+  const auth = app.auth();
+
+  function doCreateUserWithEmailAndPassword(email, password) {
+    auth.createUserWithEmailAndPassword(email, password);
+  }
+
+  function doSignInWithEmailAndPassword(email, password) {
+    app.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  const doSignOut = () => app.auth.signOut();
+
+  const doPasswordReset = (email) => app.auth.sendPasswordResetEmail(email);
+
+  const doPasswordUpdate = (password) =>
+    app.auth.currentUser.updatePassword(password);
 
   // fromStore
   function uploadReducers({ chests, side, winSide }) {
