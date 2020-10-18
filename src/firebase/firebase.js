@@ -1,11 +1,12 @@
 import React, { createContext } from "react";
+import { ReactReduxContext } from "react-redux";
 import firebaseConfig from "./firebaseConfig";
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import { useDispatch } from "react-redux";
 
-import { updateData } from "../actions";
+import { updateData, SetAuthUserAndUploadReducers } from "../actions";
 
 // we create a React Context, for this to be accessible
 // from a component later
@@ -19,10 +20,15 @@ export default ({ children }) => {
   };
 
   const dispatch = useDispatch();
+  // var firebaseui = require("firebaseui");
 
   if (!app.apps.length) {
     // Set the configuration for your app
     app.initializeApp(firebaseConfig);
+    const auth = app.auth;
+
+    var user = null;
+
     firebase = {
       app: app,
       // Get a reference to the database service
@@ -31,37 +37,63 @@ export default ({ children }) => {
       api: {
         uploadReducers,
         downloadReducers,
-        doCreateUserWithEmailAndPassword,
-        doSignInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
       },
+
+      auth: auth,
+
+      user: user,
     };
   }
 
-  // *** Auth API ***
-  const auth = app.auth();
-
-  function doCreateUserWithEmailAndPassword(email, password) {
-    auth.createUserWithEmailAndPassword(email, password);
+  function createUserWithEmailAndPassword(email, password, username) {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((username) => {
+        signInWithEmailAndPassword(email, password, username);
+        // this.props.firebase.api.uploadReducers();
+        // this.props.history.push(routes.LANDING);
+      });
   }
 
-  function doSignInWithEmailAndPassword(email, password) {
-    app.auth.signInWithEmailAndPassword(email, password);
+  function signInWithEmailAndPassword(email, password, username) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        onAuthStateChanged(username);
+      });
   }
 
-  const doSignOut = () => app.auth.signOut();
-
-  const doPasswordReset = (email) => app.auth.sendPasswordResetEmail(email);
-
-  const doPasswordUpdate = (password) =>
-    app.auth.currentUser.updatePassword(password);
+  function onAuthStateChanged(username) {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        var name = user.displayName;
+        console.log("name:", name);
+        console.log("user:", user);
+        console.log("user.Displayname:", user.displayName);
+        console.log("user.email:", user.email);
+        // console.log("user.getToken:", user.getIdToken();
+        console.log("username:", username);
+        // user.updateProfile({
+        //   displayName: username,
+        // });
+        dispatch(SetAuthUserAndUploadReducers(username, uploadReducers));
+      }
+    });
+  }
 
   // fromStore
-  function uploadReducers({ chests, side, winSide }) {
+  function uploadReducers({ authUser, chests, side, winSide }) {
     // call this function whenever sth has to be updated to Firebase
     // the ref() can be used to input the corresponding node name in Firebase
     firebase.database
       .ref()
       .set({
+        authUser: authUser,
         chests: chests,
         side: side,
         winSide: winSide,

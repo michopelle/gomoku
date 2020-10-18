@@ -18,6 +18,9 @@ const HeaderNonAuth = () => (
     <Link to="/signin" className="item">
       Sign In
     </Link>
+    <Link to="/gameplay" className="item">
+      Game Play
+    </Link>
   </div>
 );
 

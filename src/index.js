@@ -6,14 +6,16 @@ import thunk from "redux-thunk";
 
 import App from "./components/App";
 import reducers from "./reducers";
-import FirebaseProvider from "./firebase/firebase";
+import FirebaseProvider, { FirebaseContext } from "./firebase/firebase";
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
     <FirebaseProvider>
-      <App />
+      <FirebaseContext.Consumer>
+        {(firebase) => <App firebase={firebase} />}
+      </FirebaseContext.Consumer>
     </FirebaseProvider>
   </Provider>,
   document.querySelector("#root")

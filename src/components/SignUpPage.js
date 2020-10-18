@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import { FirebaseContext } from "../firebase/firebase";
 import * as routes from "../constants/routes";
+import { SetAuthUserAndUploadReducers } from "../actions";
 
 const SignUpPage = () => {
   return (
@@ -40,16 +42,11 @@ class SignUpForm extends Component {
     const { username, email, passwordOne } = this.state;
     event.preventDefault();
 
-    console.log(this.props.firebase.api.doCreateUserWithEmailAndPassword);
-    this.props.firebase.api
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then((authUser) => {
-        //   this.setState({ ...InitialState });
-        this.props.history.push(routes.LANDING);
-      })
-      .catch((error) => {
-        this.setState({ error });
-      });
+    this.props.firebase.api.createUserWithEmailAndPassword(
+      email,
+      passwordOne,
+      username
+    );
   };
 
   render() {
@@ -98,12 +95,20 @@ class SignUpForm extends Component {
     );
   }
 }
+
 const SignUpLink = () => (
   <p>
     Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
   </p>
 );
 
-export default SignUpPage;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    SetAuthUserAndUploadReducers: (authUser) =>
+      dispatch(SetAuthUserAndUploadReducers(authUser)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(SignUpPage);
 
 export { SignUpForm, SignUpLink };

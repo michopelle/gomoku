@@ -46,3 +46,21 @@ export const resetChest = () => {
     type: "RESET_CHEST",
   };
 };
+
+export const SetAuthUserAndUploadReducers = (authUser, uploadReducers) => {
+  return async (dispatch, getState) => {
+    await dispatch(SetAuthUser(authUser));
+
+    const { chests, side, winSide } = getState();
+    uploadReducers({ authUser, chests, side, winSide });
+  };
+};
+
+const SetAuthUser = (authUser) => {
+  return {
+    type: "SET_AUTH_USER",
+    payload: {
+      authUser: authUser,
+    },
+  };
+};
