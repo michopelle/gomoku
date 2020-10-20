@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { ActionCreators as UndoActionCreators } from "redux-undo";
 
-import { resetChest } from "../actions";
+import { resetChest } from "../store/actions/";
 
 class Reset extends React.Component {
   onResetClick = () => {

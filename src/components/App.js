@@ -1,26 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import Header from "./Header";
-import LandingPage from "./LandingPage";
-import SignUpPage from "./SignUpPage";
-import SignInPage from "./SignInPage";
-import GamePlayPage from "./GamePlayPage";
+import LandingPage from "./screens/LandingPage";
+import SignUpPage from "./screens/SignUpPage";
+import SignInPage from "./screens/SignInPage";
+import GamePlayPage from "./screens/GamePlayPage";
 import * as routes from "../constants/routes";
-import { useDispatch, useSelector } from "react-redux";
-import { SetAuthUserAndUploadReducers } from "../actions";
+import { useDispatch } from "react-redux";
 
-const App = ({ api }) => {
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   api.onAuthStateChanged((authUser) => {
-  //     if (authUser) {
-  //       dispatch(SetAuthUserAndUploadReducers);
-  //     }
-  //   });
-  // });
-
+// replace (_) with (firebase) when necessary
+const App = (_) => {
   return (
     <div className="ui container">
       <BrowserRouter>

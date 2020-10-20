@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { ReactReduxContext } from "react-redux";
-import { withRouter } from "react-router-dom";
 
-import { FirebaseContext } from "../firebase/firebase";
+import { FirebaseContext } from "../../firebase/firebase";
 import { SignUpLink } from "./SignUpPage";
 
 const SignInPage = () => {
@@ -31,7 +30,6 @@ const InitialState = {
 class SignInForm extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.firebase.api);
     this.state = {
       ...InitialState,
     };
@@ -50,17 +48,10 @@ class SignInForm extends Component {
       password,
       username
     );
-    // .then(() => {
-    //   this.props.firebase.api.uploadReducers(
-    //     this.props.store.getState(),
-    //     this.props.firebase.database
-    //   );
-    // });
   };
 
   render() {
     const { username, email, password, error } = this.state;
-    console.log(username, email, password);
     const isInvalid = password === "" || email === "" || username === "";
 
     return (

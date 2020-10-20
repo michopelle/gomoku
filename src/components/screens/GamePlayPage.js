@@ -1,16 +1,15 @@
 import React from "react";
 
-import Board from "./Board";
-import Reset from "./Reset";
-import UndoRedo from "../containers/UndoRedo";
-import "./App.css";
-import WinSide from "./WinSide";
-import { FirebaseContext } from "../firebase/firebase";
+import Board from "../Board";
+import Reset from "../Reset";
+import UndoRedo from "../../containers/UndoRedo";
+import "../App.css";
+import WinSide from "../WinSide";
+import { FirebaseContext } from "../../firebase/firebase";
 import { ReactReduxContext } from "react-redux";
 
 const GamePlayPage = () => {
-  // const renderedList = ({ store, api, database }) => {
-  const renderedList = (store, api, database) => {
+  const renderedList = ({ store, api, database }) => {
     return (
       <div>
         <div className="Board">
@@ -23,14 +22,11 @@ const GamePlayPage = () => {
     );
   };
 
-  // const renderedListWithFirebase = withFirebase(renderedList({store}))
-
   return (
     <div className="ui container">
       <div className="table table-borderless">
         <ReactReduxContext.Consumer>
           {({ store }) => (
-            // {({ store }) => withFirebase(renderedList({ store }))}
             <FirebaseContext.Consumer>
               {({ api, database }) => renderedList({ store, api, database })}
             </FirebaseContext.Consumer>

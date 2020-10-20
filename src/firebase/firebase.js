@@ -6,7 +6,7 @@ import "firebase/auth";
 import "firebase/database";
 import { useDispatch } from "react-redux";
 
-import { updateData, SetAuthUserAndUploadReducers } from "../actions";
+import { updateData, SetAuthUserAndUploadReducers } from "../store/actions/";
 
 // we create a React Context, for this to be accessible
 // from a component later
@@ -72,15 +72,11 @@ export default ({ children }) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         var name = user.displayName;
-        console.log("name:", name);
-        console.log("user:", user);
-        console.log("user.Displayname:", user.displayName);
-        console.log("user.email:", user.email);
-        // console.log("user.getToken:", user.getIdToken();
-        console.log("username:", username);
-        // user.updateProfile({
-        //   displayName: username,
-        // });
+        // console.log("name:", name);
+        // console.log("user:", user);
+        // console.log("user.Displayname:", user.displayName);
+        // console.log("user.email:", user.email);
+        // console.log("username:", username);
         dispatch(SetAuthUserAndUploadReducers(username, uploadReducers));
       }
     });

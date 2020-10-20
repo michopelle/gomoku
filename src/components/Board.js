@@ -2,20 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 
 import "./Board.css";
-import { chestMoveAndWinSide } from "../actions";
+import { chestMoveAndWinSide } from "../store/actions/";
 
 class Board extends React.Component {
   shouldComponentUpdate(nextProps) {
     return this.props !== nextProps;
   }
 
-  componentDidUpdate() {
-    // console.log("update");
-  }
+  componentDidUpdate() {}
 
   onChestClick = (_, chestListIndex, chestIndex) => {
     const { store, api, database, side, winSide, chestMove } = this.props;
-
     // Disable onClick if there is a winner
     if (!winSide) {
       chestMove(
@@ -31,7 +28,6 @@ class Board extends React.Component {
   // Render the Board based on the
   renderedList() {
     const { chests } = this.props;
-    console.log(chests);
 
     return chests.map((chestList, chestListIndex) => {
       return (
@@ -50,11 +46,10 @@ class Board extends React.Component {
                 </div>
               );
             } else {
-              // console.log(chests[chestListIndex][chestIndex]);
               return (
                 <div className="col" key={(chestListIndex, chestIndex)}>
                   <img
-                    src={require(`./${chests[chestListIndex][chestIndex]}_chess.png`)}
+                    src={require(`../assets/${chests[chestListIndex][chestIndex]}_chess.png`)}
                     alt={`${chests[chestListIndex][chestIndex]}_chess`}
                   />
                 </div>

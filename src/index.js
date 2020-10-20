@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
 import App from "./components/App";
-import reducers from "./reducers";
+import reducers from "./store/reducers/";
 import FirebaseProvider, { FirebaseContext } from "./firebase/firebase";
 
 const store = createStore(reducers, applyMiddleware(thunk));

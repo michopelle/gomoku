@@ -1,7 +1,7 @@
 .Board {
   width: 750px !important;
   height: 750px !important;
-  background-image: url("Board.jpg");
+  background-image: url("../assets/Board.jpg");
   background-size: 100%;
 }
 

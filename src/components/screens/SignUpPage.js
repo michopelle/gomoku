@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { FirebaseContext } from "../firebase/firebase";
-import * as routes from "../constants/routes";
-import { SetAuthUserAndUploadReducers } from "../actions";
+import { FirebaseContext } from "../../firebase/firebase";
+import * as routes from "../../constants/routes";
+import { SetAuthUserAndUploadReducers } from "../../store/actions/";
 
 const SignUpPage = () => {
   return (
@@ -51,7 +51,6 @@ class SignUpForm extends Component {
 
   render() {
     const { username, email, passwordOne, passwordTwo, error } = this.state;
-    console.log(username, email, passwordOne, passwordTwo);
     const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === "" ||
