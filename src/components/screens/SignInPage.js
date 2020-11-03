@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { ReactReduxContext } from "react-redux";
+import { Form, Field } from "react-final-form";
 
 import { FirebaseContext } from "../../firebase/firebase";
 import { SignUpLink } from "./SignUpPage";
@@ -20,69 +21,64 @@ const SignInPage = () => {
   );
 };
 
-const InitialState = {
-  username: "",
-  email: "",
-  password: "",
-  error: null,
-};
-
-class SignInForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...InitialState,
-    };
-  }
-
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  onSubmit = (event) => {
-    const { username, email, password } = this.state;
+const SignInForm = ({ firebase, store }) => {
+  const onSubmit = (event) => {
     event.preventDefault();
 
-    this.props.firebase.api.signInWithEmailAndPassword(
-      email,
-      password,
-      username
-    );
+    // firebase.api.signInWithEmailAndPassword(email, password, username);
   };
 
-  render() {
-    const { username, email, password, error } = this.state;
-    const isInvalid = password === "" || email === "" || username === "";
-
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="username"
-          value={username}
-          onChange={this.onChange}
-          type="text"
-          placeholder="User Name"
-        />
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button type="submit" disabled={isInvalid}>
-          Sign In
-        </button>
-      </form>
-    );
-  }
-}
+  return (
+    <Form
+      onSubmit={onSubmit}
+      render={({ handleSubmit, form, submitting, values, errors }) => (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email</label>
+            <Field
+              name="email"
+              component="input"
+              type="text"
+              placeholder="Email"
+            />
+          </div>
+          <div>
+            <label>Display Name</label>
+            <Field
+              name="displayName"
+              component="input"
+              type="text"
+              placeholder="Display Name"
+            />
+          </div>
+          <div>
+            <label>Password</label>
+            <Field
+              name="password"
+              component="input"
+              type="text"
+              placeholder="Password"
+            />
+          </div>
+          <div>
+            <label>Confirm Password</label>
+            <Field
+              name="confirm"
+              component="input"
+              type="text"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div className="buttons">
+            <button
+              type="onSubmit"
+              disabled={submitting && Object.keys(errors).length}
+            />
+          </div>
+        </form>
+      )}
+    />
+  );
+};
 
 export default SignInPage;
