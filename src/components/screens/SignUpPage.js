@@ -1,11 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Form, Field } from "react-final-form";
+import { Form } from "react-final-form";
 
 import { FirebaseContext } from "../../firebase/firebase";
 import * as routes from "../../constants/routes";
 import { SetAuthUserAndUploadReducers } from "../../store/actions/";
+import {
+  DisplayNameField,
+  PasswordField,
+  ConfirmField,
+  EmailField,
+  SubmitButton,
+} from "../organisms/form/";
 
 const SignUpPage = ({ SetAuthUserAndUploadReducers }) => {
   return (
@@ -19,8 +26,9 @@ const SignUpPage = ({ SetAuthUserAndUploadReducers }) => {
 };
 
 const SignUpForm = ({ firebase, store }) => {
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = (values) => {
+    // const { email, displayName, password, confirm } = values;
+    window.alert(JSON.stringify(values, 0, 2));
 
     // firebase.api.createUserWithEmailAndPassword(
     //   email,
@@ -32,50 +40,21 @@ const SignUpForm = ({ firebase, store }) => {
   return (
     <Form
       onSubmit={onSubmit}
-      render={({ handleSubmit, form, submitting, values, errors }) => (
+      validate={(values) => {
+        const errors = {};
+        if (values.password !== values.confirm) {
+          errors.confirm = "The passwords are not the same, please try again.";
+        }
+        return errors;
+      }}
+      // form, values, errors can be used in the props below (react-final-form)
+      render={({ handleSubmit, submitting }) => (
         <form onSubmit={handleSubmit}>
-          <div>
-            <label>Email</label>
-            <Field
-              name="email"
-              component="input"
-              type="text"
-              placeholder="Email"
-            />
-          </div>
-          <div>
-            <label>Display Name</label>
-            <Field
-              name="displayName"
-              component="input"
-              type="text"
-              placeholder="Display Name"
-            />
-          </div>
-          <div>
-            <label>Password</label>
-            <Field
-              name="password"
-              component="input"
-              type="text"
-              placeholder="Password"
-            />
-          </div>
-          <div>
-            <label>Confirm Password</label>
-            <Field
-              name="confirm"
-              component="input"
-              type="text"
-              placeholder="Confirm Password"
-            />
-          </div>
-          <div className="buttons">
-            <button
-              type="onSubmit"
-              disabled={submitting && Object.keys(errors).length}
-            />
-          </div>
+          <EmailField />
+          <DisplayNameField />
+          <PasswordField />
+          <ConfirmField />
+          <SubmitButton {...submitting} />{" "}
         </form>
       )}
     />
