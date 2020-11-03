@@ -4,19 +4,16 @@ import { ActionCreators as UndoActionCreators } from "redux-undo";
 
 import { resetChest } from "../store/actions/";
 
-class Reset extends React.Component {
-  onResetClick = () => {
-    const { store, api, database, resetChest, onClearHistory } = this.props;
+const Reset = ({ store, api, database, resetChest, onClearHistory }) => {
+  const onResetClick = () => {
     resetChest();
     onClearHistory();
     // upload to firebase
     api.uploadReducers(store.getState(), database);
   };
 
-  render() {
-    return <button onClick={() => this.onResetClick()}>Reset</button>;
-  }
-}
+  return <button onClick={() => onResetClick()}>Reset</button>;
+};
 
 const mapStateToProps = (state) => {
   return {

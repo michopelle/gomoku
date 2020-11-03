@@ -7,7 +7,6 @@ import SignUpPage from "./screens/SignUpPage";
 import SignInPage from "./screens/SignInPage";
 import GamePlayPage from "./screens/GamePlayPage";
 import * as routes from "../constants/routes";
-import { useDispatch } from "react-redux";
 
 // replace (_) with (firebase) when necessary
 const App = (_) => {

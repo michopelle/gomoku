@@ -1,14 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 
-class WinSide extends React.Component {
-  render() {
-    if (this.props.winSide !== false) {
-      return <div>The winner is {this.props.winSide}</div>;
-    }
-    return null;
+const WinSide = ({ winSide }) => {
+  if (winSide !== false) {
+    return <div>The winner is {winSide}</div>;
   }
-}
+  return null;
+};
 
 const mapStateToProps = (state) => {
   return {

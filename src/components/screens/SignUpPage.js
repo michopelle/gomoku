@@ -1,12 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { Form, Field } from "react-final-form";
 
 import { FirebaseContext } from "../../firebase/firebase";
 import * as routes from "../../constants/routes";
 import { SetAuthUserAndUploadReducers } from "../../store/actions/";
 
-const SignUpPage = () => {
+const SignUpPage = ({ SetAuthUserAndUploadReducers }) => {
   return (
     <div>
       <h1>Sign Up</h1>
@@ -17,83 +18,69 @@ const SignUpPage = () => {
   );
 };
 
-const InitialState = {
-  username: "",
-  email: "",
-  passwordOne: "",
-  passwordTwo: "",
-  error: null,
-};
-
-class SignUpForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      ...InitialState,
-    };
-  }
-
-  onChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  onSubmit = (event) => {
-    const { username, email, passwordOne } = this.state;
+const SignUpForm = ({ firebase, store }) => {
+  const onSubmit = (event) => {
     event.preventDefault();
 
-    this.props.firebase.api.createUserWithEmailAndPassword(
-      email,
-      passwordOne,
-      username
-    );
+    // firebase.api.createUserWithEmailAndPassword(
+    //   email,
+    //   passwordOne,
+    //   username
+    // );
   };
 
-  render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state;
-    const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === "" ||
-      email === "" ||
-      username === "";
-
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="username"
-          value={username}
-          onChange={this.onChange}
-          type="text"
-          placeholder="User Name"
-        />
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          name="passwordOne"
-          value={passwordOne}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <input
-          name="passwordTwo"
-          value={passwordTwo}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <button type="submit" disabled={isInvalid}>
-          Sign Up
-        </button>
-      </form>
-    );
-  }
-}
+  return (
+    <Form
+      onSubmit={onSubmit}
+      render={({ handleSubmit, form, submitting, values, errors }) => (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email</label>
+            <Field
+              name="email"
+              component="input"
+              type="text"
+              placeholder="Email"
+            />
+          </div>
+          <div>
+            <label>Display Name</label>
+            <Field
+              name="displayName"
+              component="input"
+              type="text"
+              placeholder="Display Name"
+            />
+          </div>
+          <div>
+            <label>Password</label>
+            <Field
+              name="password"
+              component="input"
+              type="text"
+              placeholder="Password"
+            />
+          </div>
+          <div>
+            <label>Confirm Password</label>
+            <Field
+              name="confirm"
+              component="input"
+              type="text"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div className="buttons">
+            <button
+              type="onSubmit"
+              disabled={submitting && Object.keys(errors).length}
+            />
+          </div>
+        </form>
+      )}
+    />
+  );
+};
 
 const SignUpLink = () => (
   <p>

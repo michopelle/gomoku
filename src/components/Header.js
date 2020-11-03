@@ -24,18 +24,16 @@ const HeaderNonAuth = () => (
   </div>
 );
 
-class Header extends React.Component {
-  render() {
-    return (
-      <div className="ui secondary pointing menu">
-        <Link to="/" className="item">
-          Landing
-        </Link>
-        <div>{this.props.authUser ? <HeaderAuth /> : <HeaderNonAuth />}</div>
-      </div>
-    );
-  }
-}
+const Header = ({ authUser }) => {
+  return (
+    <div className="ui secondary pointing menu">
+      <Link to="/" className="item">
+        Landing
+      </Link>
+      <div>{authUser ? <HeaderAuth /> : <HeaderNonAuth />}</div>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {

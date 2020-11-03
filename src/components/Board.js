@@ -4,15 +4,14 @@ import { connect } from "react-redux";
 import "./Board.css";
 import { chestMoveAndWinSide } from "../store/actions/";
 
-class Board extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return this.props !== nextProps;
-  }
+const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
+  // shouldComponentUpdate(nextProps) {
+  //   return this.props !== nextProps;
+  // }
 
-  componentDidUpdate() {}
+  // componentDidUpdate() {}
 
-  onChestClick = (_, chestListIndex, chestIndex) => {
-    const { store, api, database, side, winSide, chestMove } = this.props;
+  const onChestClick = (_, chestListIndex, chestIndex) => {
     // Disable onClick if there is a winner
     if (!winSide) {
       chestMove(
@@ -26,9 +25,7 @@ class Board extends React.Component {
   };
 
   // Render the Board based on the
-  renderedList() {
-    const { chests } = this.props;
-
+  const renderedList = () => {
     return chests.map((chestList, chestListIndex) => {
       return (
         <div className="row" key={chestListIndex}>
@@ -38,9 +35,7 @@ class Board extends React.Component {
                 <div
                   className="col"
                   key={(chestListIndex, chestIndex)}
-                  onClick={(e) =>
-                    this.onChestClick(e, chestListIndex, chestIndex)
-                  }
+                  onClick={(e) => onChestClick(e, chestListIndex, chestIndex)}
                 >
                   {chest}
                 </div>
@@ -59,12 +54,10 @@ class Board extends React.Component {
         </div>
       );
     });
-  }
+  };
 
-  render() {
-    return this.renderedList();
-  }
-}
+  return renderedList();
+};
 
 const mapStateToProps = (state) => {
   return {
