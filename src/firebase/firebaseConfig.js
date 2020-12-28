@@ -5,6 +5,6 @@ export default {
   projectId: "gomoku-8fa46",
   storageBucket: "gomoku-8fa46.appspot.com",
   messagingSenderId: "294256408536",
-  appId: "1:294256408536:web:f9501163a411c476c1e4ad",
-  measurementId: "G-9D68KDFD5F",
+  // appId: "1:294256408536:web:f9501163a411c476c1e4ad",
+  // measurementId: "G-9D68KDFD5F",
 };

@@ -4,38 +4,21 @@ import { connect } from "react-redux";
 import "./Board.css";
 import { chestMoveAndWinSide } from "../store/actions/";
 
-const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
-  // shouldComponentUpdate(nextProps) {
-  //   return this.props !== nextProps;
-  // }
-
-  // componentDidUpdate() {}
-
-  const onChestClick = (_, chestListIndex, chestIndex) => {
-    // Disable onClick if there is a winner
-    if (!winSide) {
-      chestMove(
-        chestListIndex, // positionX
-        chestIndex, // positionY
-        side
-      );
-    }
-    // upload to firebase
-    api.uploadReducers(store.getState(), database);
-  };
-
+const Board = ({ data }) => {
   // Render the Board based on the
   const renderedList = () => {
-    return chests.map((chestList, chestListIndex) => {
+    const { chests, side, winSide } = data;
+    console.log(data, chests, side, winSide);
+    return chests.present.map((chestList, chestListIndex) => {
       return (
         <div className="row" key={chestListIndex}>
           {chestList.map((chest, chestIndex) => {
-            if (chests[chestListIndex][chestIndex] === "") {
+            if (chests.present[chestListIndex][chestIndex] === "") {
               return (
                 <div
                   className="col"
                   key={(chestListIndex, chestIndex)}
-                  onClick={(e) => onChestClick(e, chestListIndex, chestIndex)}
+                  // onClick={(e) => onChestClick(e, chestListIndex, chestIndex)}
                 >
                   {chest}
                 </div>
@@ -44,8 +27,8 @@ const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
               return (
                 <div className="col" key={(chestListIndex, chestIndex)}>
                   <img
-                    src={require(`../assets/${chests[chestListIndex][chestIndex]}_chess.png`)}
-                    alt={`${chests[chestListIndex][chestIndex]}_chess`}
+                    src={require(`../assets/${chests.present[chestListIndex][chestIndex]}_chess.png`)}
+                    alt={`${chests.present[chestListIndex][chestIndex]}_chess`}
                   />
                 </div>
               );
@@ -56,22 +39,7 @@ const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
     });
   };
 
-  return renderedList();
+  return data && data.chests ? renderedList() : <div></div>;
 };
 
-const mapStateToProps = (state) => {
-  return {
-    chests: state.chests.present,
-    side: state.side,
-    winSide: state.winSide,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    chestMove: (chestListIndex, chestIndex, side) =>
-      dispatch(chestMoveAndWinSide(chestListIndex, chestIndex, side)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Board);
+export default Board;
