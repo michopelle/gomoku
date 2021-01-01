@@ -1,31 +1,22 @@
 import React from "react";
-import { connect } from "react-redux";
 
 import "./Board.css";
 import { FirebaseDatabaseMutation } from "@react-firebase/database";
-import { chestMoveAndWinSide } from "../store/actions/";
 
 const Board = ({ data }) => {
   const onChestClick = async (_, runMutation, chestListIndex, chestIndex) => {
     try {
-      console.log("hellpo");
       const { chests, side, winSide } = data;
+      console.log("chests", chests.present["0"]);
       console.log("side", side);
       // Disable onClick if there is a winner
       if (!winSide) {
         await runMutation({
-          ...data,
-          chests: {
-            ...chests,
-            present: chests.present.map((el, index) =>
-              index === chestListIndex
-                ? el.map((ele, i) => (i === parseInt(chestIndex) ? side : ele))
-                : el
-            ),
-          },
-          side: side === "black" ? "white" : "black",
+          ...chests.present[chestListIndex],
+          [chestIndex]: side,
         });
       }
+      console.log("finished refresh, side: ", side.value);
     } catch (e) {
       console.log(e);
     }
@@ -34,14 +25,17 @@ const Board = ({ data }) => {
   // Render the Board based on the
   const renderedList = () => {
     const { chests, side, winSide } = data;
-    console.log(data, chests, side, winSide);
+    console.log("data", data);
     return chests.present.map((chestList, chestListIndex) => {
       return (
         <div className="row" key={chestListIndex}>
           {chestList.map((chest, chestIndex) => {
             if (chests.present[chestListIndex][chestIndex] === "") {
               return (
-                <FirebaseDatabaseMutation type="set" path="/">
+                <FirebaseDatabaseMutation
+                  type="set"
+                  path={`/chests/present/${chestListIndex}`}
+                >
                   {({ runMutation }) => {
                     return (
                       <div
@@ -55,9 +49,7 @@ const Board = ({ data }) => {
                             chestIndex
                           )
                         }
-                      >
-                        {chest}
-                      </div>
+                      />
                     );
                   }}
                 </FirebaseDatabaseMutation>

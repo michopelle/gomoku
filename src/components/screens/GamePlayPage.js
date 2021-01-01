@@ -15,17 +15,17 @@ const GamePlayPage = () => {
   return (
     <div className="ui container">
       <div className="table table-borderless">
-        <FirebaseDatabaseNode path="/">
+        <FirebaseDatabaseNode path="/" orderByKey>
           {(d) => {
             return (
-              <div>
+              <>
                 <div className="Board">
                   <Board data={d.value} />
                 </div>
                 <UndoRedo />
                 <Reset />
                 <WinSide />
-              </div>
+              </>
             );
           }}
         </FirebaseDatabaseNode>
