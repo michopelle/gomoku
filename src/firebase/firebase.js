@@ -88,11 +88,10 @@ export default ({ children }) => {
     // the ref() can be used to input the corresponding node name in Firebase
     firebase.database
       .ref()
-      .set({
-        authUser: authUser,
-        chests: chests,
-        side: side,
-        winSide: winSide,
+      .update({
+        "/chests": chests,
+        "/side": side,
+        "/winSide": winSide,
       })
       .then((doc) => {})
       .catch((error) => {

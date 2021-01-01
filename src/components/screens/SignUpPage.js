@@ -54,7 +54,7 @@ const SignUpForm = ({ firebase, store }) => {
           <DisplayNameField />
           <PasswordField />
           <ConfirmField />
-          <SubmitButton {...submitting} />{" "}
+          <SubmitButton {...submitting} />
         </form>
       )}
     />

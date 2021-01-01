@@ -5,12 +5,6 @@ import "./Board.css";
 import { chestMoveAndWinSide } from "../store/actions/";
 
 const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
-  // shouldComponentUpdate(nextProps) {
-  //   return this.props !== nextProps;
-  // }
-
-  // componentDidUpdate() {}
-
   const onChestClick = (_, chestListIndex, chestIndex) => {
     // Disable onClick if there is a winner
     if (!winSide) {

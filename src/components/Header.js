@@ -30,7 +30,10 @@ const Header = ({ authUser }) => {
       <Link to="/" className="item">
         Landing
       </Link>
-      <div>{authUser ? <HeaderAuth /> : <HeaderNonAuth />}</div>
+      <Link to="/gameplay" className="item">
+        Game Play
+      </Link>
+      {/* <div>{authUser ? <HeaderAuth /> : <HeaderNonAuth />}</div> */}
     </div>
   );
 };

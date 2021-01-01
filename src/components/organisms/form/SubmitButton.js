@@ -6,7 +6,9 @@ export const SubmitButton = ({ submitting, errors }) => {
       <button
         type="onSubmit"
         disabled={submitting && Object.keys(errors).length}
-      />
+      >
+        Submit
+      </button>
     </div>
   );
 };
