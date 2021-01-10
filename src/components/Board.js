@@ -22,12 +22,20 @@ const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
   const renderedList = () => {
     return chests.map((chestList, chestListIndex) => {
       return (
-        <div className="row" key={chestListIndex}>
+        <div
+          className="row boardRow"
+          key={chestListIndex}
+          style={{
+            top: String(chestListIndex * 6.67) + "%",
+            height: "6.67" + "%",
+            bottom: 0,
+          }}
+        >
           {chestList.map((chest, chestIndex) => {
             if (chests[chestListIndex][chestIndex] === "") {
               return (
                 <div
-                  className="col"
+                  className="col boardCol"
                   key={(chestListIndex, chestIndex)}
                   onClick={(e) => onChestClick(e, chestListIndex, chestIndex)}
                 >
@@ -36,7 +44,10 @@ const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
               );
             } else {
               return (
-                <div className="col" key={(chestListIndex, chestIndex)}>
+                <div
+                  className="col boardCol"
+                  key={(chestListIndex, chestIndex)}
+                >
                   <img
                     src={require(`../assets/${chests[chestListIndex][chestIndex]}_chess.png`)}
                     alt={`${chests[chestListIndex][chestIndex]}_chess`}

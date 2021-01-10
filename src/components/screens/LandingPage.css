@@ -1,14 +1,23 @@
-.landing {
-  background-color: red;
+#gamePlayInterface {
+  width: 75%;
+  float: left;
+  border-right-style: solid;
+}
+#roomInterface {
+  background-color: green;
+  width: 25%;
+  float: left;
 }
 
-.gamePlay {
-  position: relative;
-  background-color: blue;
-}
-
-.room {
-  position: relative;
+@media only screen and (max-width: 768px) {
+  #gamePlayInterface {
+    background-color: purple;
+    width: 100%;
+  }
+  #roomInterface {
+    background-color: pink;
+    width: 100%;
+  }
 }
 
 .roomInfo {

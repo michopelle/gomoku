@@ -1,3 +1,9 @@
+* {
+  /* the padding and border are included in the total width and height of the elements */
+  /* https://www.w3schools.com/css/css3_box-sizing.asp */
+  box-sizing: border-box;
+}
+
 .headcontainer {
   background-color: grey;
 }
@@ -7,11 +13,13 @@
 }
 
 .Board {
-  margin-top: 1000px;
+  position: relative;
   background-color: red;
-  width: 750px !important;
-  height: 750px !important;
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
   background-image: url("../assets/Board.jpg");
+  background-repeat: no-repeat;
   background-size: 100%;
 }
 
