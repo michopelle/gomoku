@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
+import { FirebaseContext } from "../firebase/firebase";
 import Header from "./Header";
 import LandingPage from "./screens/LandingPage";
 import GamePlayPage from "./screens/GamePlayPage";
@@ -15,15 +16,13 @@ const App = (_) => {
       <BrowserRouter>
         <Header />
 
-        <div>
-          <Route path={routes.LANDING} exact>
-            <LandingPage setName={setName} />
-          </Route>
-          {/* <Route path={routes.SIGN_UP} exact component={SignUpPage} />
-          <Route path={routes.SIGN_IN} exact component={SignInPage} /> */}
-          <Route path={routes.GAME_PLAY} exact>
-            <GamePlayPage name={name} />
-          </Route>
+        <div className="ui container">
+          {/* <Route path={routes.LANDING} exact> */}
+          <FirebaseContext.Consumer>
+            {({ api }) => <LandingPage api={api} />}
+          </FirebaseContext.Consumer>
+          {/* </Route> */}
+          {/* <Route path={routes.GAME_PLAY} exact component={GamePlayPage} /> */}
         </div>
       </BrowserRouter>
     </div>

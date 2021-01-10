@@ -1,0 +1,23 @@
+.landing {
+  background-color: red;
+}
+
+.gamePlay {
+  position: relative;
+  background-color: blue;
+}
+
+.room {
+  position: relative;
+}
+
+.roomInfo {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.roomIdInput {
+  display: flex;
+  flex-direction: row;
+}

@@ -1,4 +1,14 @@
+.headcontainer {
+  background-color: grey;
+}
+
+.xcontainer {
+  background-color: purple;
+}
+
 .Board {
+  margin-top: 1000px;
+  background-color: red;
   width: 750px !important;
   height: 750px !important;
   background-image: url("../assets/Board.jpg");

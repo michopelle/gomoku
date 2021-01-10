@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 const HeaderAuth = () => (
-  <div className="right menu">
+  <div className="">
     <Link to="/gameplay" className="item">
       Game Play
     </Link>
@@ -11,13 +11,7 @@ const HeaderAuth = () => (
 );
 
 const HeaderNonAuth = () => (
-  <div className="right menu">
-    <Link to="/signup" className="item">
-      Sign Up
-    </Link>
-    <Link to="/signin" className="item">
-      Sign In
-    </Link>
+  <div className="">
     <Link to="/gameplay" className="item">
       Game Play
     </Link>
@@ -26,7 +20,7 @@ const HeaderNonAuth = () => (
 
 const Header = ({ authUser }) => {
   return (
-    <div className="ui secondary pointing menu">
+    <div className="">
       <Link to="/" className="item">
         Landing
       </Link>
