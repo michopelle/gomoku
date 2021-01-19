@@ -12,7 +12,7 @@ const store = createStore(reducers, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
-    <FirebaseProvider>
+    <FirebaseProvider store={store}>
       <FirebaseContext.Consumer>
         {(firebase) => <App firebase={firebase} />}
       </FirebaseContext.Consumer>

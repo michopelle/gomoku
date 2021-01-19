@@ -86,6 +86,12 @@ export const setRoomInfo = ({ roomId, key, host, opponentDisplayName }) => {
   };
 };
 
+export const gameInit = () => {
+  return {
+    type: "GAME_INIT",
+  };
+};
+
 export const setRoomError = ({ error }) => {
   return {
     type: "SET_ROOM_ERROR",

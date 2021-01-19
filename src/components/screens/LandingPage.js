@@ -6,14 +6,19 @@ import GamePlayInterface from "../organisms/interface/GamePlayInterface";
 import RoomInterface from "../organisms/interface/RoomInterface";
 import { setDisplayName } from "../../store/actions/index";
 
-const LandingPage = () => {
+const LandingPage = ({ api, store, roomInfo }) => {
+  window.addEventListener("unload", (event) => {
+    console.log("calling event listener to remove unmatch node");
+    api.removeUnmatchNode({ key: roomInfo.key });
+  });
+
   return (
-    <div className="">
+    <div className="" id="landingPage">
       <div className="" id="gamePlayInterface">
-        <GamePlayInterface />
+        <GamePlayInterface api={api} store={store} />
       </div>
       <div className="" id="roomInterface">
-        <RoomInterface />
+        <RoomInterface api={api} store={store} />
       </div>
     </div>
   );

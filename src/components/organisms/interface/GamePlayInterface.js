@@ -1,40 +1,30 @@
 import React from "react";
 
+import "./gamePlayInterface.css";
 import Board from "../../Board";
 import Reset from "../../Reset";
 import UndoRedo from "../../../containers/UndoRedo";
-import "../../App.css";
+// import "../../App.css";
 import WinSide from "../../WinSide";
-import { FirebaseContext } from "../../../firebase/firebase";
-import { ReactReduxContext } from "react-redux";
 
-const GamePlayInterface = () => {
-  const renderedList = ({ store, api, database }) => {
+const GamePlayInterface = ({ api, store }) => {
+  const renderedList = () => {
     return (
-      <div id="gamePlay">
+      <>
         <div className="Board" id="board">
-          <Board store={store} api={api} database={database} />
+          <Board store={store} api={api} />
         </div>
         <UndoRedo />
-        <Reset store={store} api={api} database={database} />
+        <Reset store={store} api={api} />
         <WinSide />
-      </div>
+      </>
     );
   };
 
-  return (
-    <div className="container">
-      <div className="table table-borderless">
-        <ReactReduxContext.Consumer>
-          {({ store }) => (
-            <FirebaseContext.Consumer>
-              {({ api, database }) => renderedList({ store, api, database })}
-            </FirebaseContext.Consumer>
-          )}
-        </ReactReduxContext.Consumer>
-      </div>
-    </div>
-  );
+  return renderedList();
+  // <div className="container">
+  //   <div className="table table-borderless">{renderedList()}</div>
+  // </div>
 };
 
 export default GamePlayInterface;

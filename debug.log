@@ -3,3 +3,16 @@
 [0107/111122.294:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [0108/132254.045:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [0110/133045.992:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0110/235932.302:ERROR:process_reader_win.cc(108)] process 5556 not found
+[0110/235932.302:ERROR:exception_snapshot_win.cc(99)] thread ID 23752 not found in process
+[0110/235932.302:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
+[0110/235933.464:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
+[0110/235933.464:ERROR:process_info.cc(556)] ReadMemoryInfo failed
+[0110/235933.464:ERROR:process_memory_win.cc(39)] Failed to initialize ProcessInfo.
+[0110/235933.465:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
+[0111/124536.714:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0112/102501.209:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0113/115735.299:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0115/112232.913:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0119/112147.677:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0119/173530.823:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

@@ -10,7 +10,6 @@ export default (
         isErrorVisible: action.payload.error !== false ? true : false,
       };
     default:
-      console.log("from roomerror reducer default");
       return state;
   }
 };

@@ -13,7 +13,7 @@ import { updateData, setRoomInfo, setRoomError } from "../store/actions/";
 const FirebaseContext = createContext(null);
 export { FirebaseContext };
 
-export default ({ children }) => {
+export default ({ children, store }) => {
   let firebase = {
     app: null,
     database: null,
@@ -41,7 +41,9 @@ export default ({ children }) => {
         signInWithEmailAndPassword,
         onAuthStateChanged,
         setUnmatchNode,
+        removeUnmatchNode,
         findRoomId,
+        startGame,
       },
 
       auth: auth,
@@ -56,8 +58,6 @@ export default ({ children }) => {
       .createUserWithEmailAndPassword(email, password)
       .then((username) => {
         signInWithEmailAndPassword(email, password, username);
-        // this.props.firebase.api.uploadReducers();
-        // this.props.history.push(routes.LANDING);
       });
   }
 
@@ -93,11 +93,11 @@ export default ({ children }) => {
   }
 
   // fromStore
-  function uploadReducers({ chests, side, winSide }) {
+  function uploadReducers({ roomInfo, chests, side, winSide }) {
     // call this function whenever sth has to be updated to Firebase
     // the ref() can be used to input the corresponding node name in Firebase
     firebase.database
-      .ref()
+      .ref("/matchedGame/" + roomInfo.key)
       .update({
         chests: chests,
         side: side,
@@ -110,17 +110,26 @@ export default ({ children }) => {
   }
 
   // fromDb
-  function downloadReducers() {
+  function downloadReducers({ key }) {
     // This method is triggered once when the listener is attached
     // and again every time the data, including children, changes.
-    firebase.database.ref().on("value", (snapshot) => {
-      if (snapshot.val()) {
-        const { chests, side, winSide } = snapshot.val();
-        dispatch(updateData(chests, side, winSide));
-      }
-    });
+    if (key) {
+      firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
+        if (snapshot.val()) {
+          const { chests, side, winSide } = snapshot.val();
+          console.log(
+            "download reducers if",
+            "/matchedGame/" + key,
+            chests,
+            side,
+            winSide
+          );
+          dispatch(updateData(chests, side, winSide));
+        }
+      });
+    }
   }
-  downloadReducers();
+  // downloadReducers();
 
   function setUnmatchNode({ displayName }) {
     // Get a key for a new Post.
@@ -165,6 +174,14 @@ export default ({ children }) => {
       });
   }
 
+  function removeUnmatchNode({ key }) {
+    firebase.database
+      .ref("/unmatch/" + key)
+      .remove()
+      .then(() => console.log("successfully deleted node"))
+      .catch((_) => dispatch(setRoomError({ error: "Cannot delete node" })));
+  }
+
   function findRoomId({ roomId }) {
     firebase.database
       .ref("/unmatch")
@@ -178,10 +195,6 @@ export default ({ children }) => {
           if (key.substr(key.length - 6, key.length - 1) === roomId) {
             if (childSnapShot.child("joinable").val() === true) {
               console.log("childSnapShot", childSnapShot.val());
-              console.log(
-                "childSnapShot",
-                childSnapShot.child("joinable").val()
-              );
 
               // switch joinable to false after a player is joined
               // change state to render joined room
@@ -219,6 +232,41 @@ export default ({ children }) => {
           dispatch(setRoomError({ error: "Cannot find room" }));
         }
       });
+  }
+
+  function startGame({
+    roomId,
+    key,
+    displayName,
+    opponentDisplayName,
+    chests,
+    side,
+    winSide,
+  }) {
+    const createMatchedGame = () => {
+      firebase.database
+        .ref()
+        .once("value")
+        .then((snapshot) => {
+          firebase.database.ref("/matchedGame").update({
+            [key]: {
+              roomId: roomId,
+              player1: displayName,
+              player2: opponentDisplayName,
+              chests: chests,
+              side: side,
+              winSide: winSide,
+            },
+          });
+        });
+    };
+    firebase.database
+      .ref("/unmatch/" + key)
+      .remove()
+      .then(() => {
+        createMatchedGame();
+      })
+      .catch((_) => dispatch(setRoomError({ error: "Cannot delete node" })));
   }
 
   return (

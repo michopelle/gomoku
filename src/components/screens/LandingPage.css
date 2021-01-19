@@ -4,29 +4,22 @@
   border-right-style: solid;
 }
 #roomInterface {
-  background-color: green;
   width: 25%;
   float: left;
 }
 
 @media only screen and (max-width: 768px) {
+  #landingPage {
+    display: flex;
+    flex-direction: column-reverse;
+  }
   #gamePlayInterface {
     background-color: purple;
     width: 100%;
+    justify-content: center;
   }
   #roomInterface {
     background-color: pink;
     width: 100%;
   }
-}
-
-.roomInfo {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-}
-
-.roomIdInput {
-  display: flex;
-  flex-direction: row;
 }

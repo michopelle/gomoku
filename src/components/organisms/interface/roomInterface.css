@@ -1,0 +1,19 @@
+#formDisplayName {
+  display: flex;
+  flex-direction: row;
+}
+
+.roomInfo {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.roomIdInput {
+  display: flex;
+  flex-direction: row;
+}
+
+#waitingPlayer {
+  color: grey;
+}

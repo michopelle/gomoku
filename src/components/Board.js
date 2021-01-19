@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import "./Board.css";
 import { chestMoveAndWinSide } from "../store/actions/";
 
-const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
+const Board = ({ store, api, chests, roomInfo, side, winSide, chestMove }) => {
   const onChestClick = (_, chestListIndex, chestIndex) => {
     // Disable onClick if there is a winner
     if (!winSide) {
@@ -15,50 +15,54 @@ const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
       );
     }
     // upload to firebase
-    api.uploadReducers(store.getState(), database);
+    api.uploadReducers(store.getState());
   };
 
   // Render the Board based on the
   const renderedList = () => {
-    return chests.map((chestList, chestListIndex) => {
-      return (
-        <div
-          className="row boardRow"
-          key={chestListIndex}
-          style={{
-            top: String(chestListIndex * 6.67) + "%",
-            height: "6.67" + "%",
-            bottom: 0,
-          }}
-        >
-          {chestList.map((chest, chestIndex) => {
-            if (chests[chestListIndex][chestIndex] === "") {
-              return (
-                <div
-                  className="col boardCol"
-                  key={(chestListIndex, chestIndex)}
-                  onClick={(e) => onChestClick(e, chestListIndex, chestIndex)}
-                >
-                  {chest}
-                </div>
-              );
-            } else {
-              return (
-                <div
-                  className="col boardCol"
-                  key={(chestListIndex, chestIndex)}
-                >
-                  <img
-                    src={require(`../assets/${chests[chestListIndex][chestIndex]}_chess.png`)}
-                    alt={`${chests[chestListIndex][chestIndex]}_chess`}
-                  />
-                </div>
-              );
-            }
-          })}
-        </div>
-      );
-    });
+    return roomInfo.isGameStarted
+      ? chests.map((chestList, chestListIndex) => {
+          return (
+            <div
+              className="row boardRow"
+              key={chestListIndex}
+              style={{
+                top: String(chestListIndex * 6.67) + "%",
+                height: "6.67" + "%",
+                bottom: 0,
+              }}
+            >
+              {chestList.map((chest, chestIndex) => {
+                if (chests[chestListIndex][chestIndex] === "") {
+                  return (
+                    <div
+                      className="col boardCol"
+                      key={(chestListIndex, chestIndex)}
+                      onClick={(e) =>
+                        onChestClick(e, chestListIndex, chestIndex)
+                      }
+                    >
+                      {chest}
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div
+                      className="col boardCol"
+                      key={(chestListIndex, chestIndex)}
+                    >
+                      <img
+                        src={require(`../assets/${chests[chestListIndex][chestIndex]}_chess.png`)}
+                        alt={`${chests[chestListIndex][chestIndex]}_chess`}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            </div>
+          );
+        })
+      : null;
   };
 
   return renderedList();
@@ -67,6 +71,7 @@ const Board = ({ store, api, database, chests, side, winSide, chestMove }) => {
 const mapStateToProps = (state) => {
   return {
     chests: state.chests.present,
+    roomInfo: state.roomInfo,
     side: state.side,
     winSide: state.winSide,
   };

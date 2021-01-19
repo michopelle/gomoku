@@ -4,4 +4,5 @@ export { EmailField } from "./field/EmailField";
 export { PasswordField } from "./field/PasswordField";
 export { RoomIdField } from "./field/RoomIdField";
 
+export { StartButton } from "./StartButton";
 export { SubmitButton } from "./SubmitButton";
