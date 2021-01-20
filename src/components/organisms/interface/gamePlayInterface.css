@@ -9,7 +9,16 @@
   background-repeat: no-repeat;
   background-size: 100%;
 }
-@media only screen and (min-width: 991px) {
+
+@media only screen and (min-width: 937px) {
+  /* max size for board in web mode */
+  .Board {
+    padding-top: 700px;
+  }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 703px) {
+  /* max size for board in mobile mode */
   .Board {
     padding-top: 700px;
   }

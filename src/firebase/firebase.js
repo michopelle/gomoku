@@ -41,9 +41,11 @@ export default ({ children, store }) => {
         signInWithEmailAndPassword,
         onAuthStateChanged,
         setUnmatchNode,
+        visitorJoinListener,
         removeUnmatchNode,
-        findRoomId,
+        visitorJoinViaRoomId,
         startGame,
+        removeMatchedNode,
       },
 
       auth: auth,
@@ -174,6 +176,18 @@ export default ({ children, store }) => {
       });
   }
 
+  function visitorJoinListener({ key }) {
+    firebase.database.ref("/unmatch" + key).on("value", (snapshot) => {
+      if (snapshot.val()) {
+        dispatch(
+          setRoomInfo({
+            opponentDisplayName: snapshot.val().visitorDisplayName,
+          })
+        );
+      }
+    });
+  }
+
   function removeUnmatchNode({ key }) {
     firebase.database
       .ref("/unmatch/" + key)
@@ -182,14 +196,13 @@ export default ({ children, store }) => {
       .catch((_) => dispatch(setRoomError({ error: "Cannot delete node" })));
   }
 
-  function findRoomId({ roomId }) {
+  function visitorJoinViaRoomId({ roomId, visitorDisplayName }) {
     firebase.database
       .ref("/unmatch")
       .orderByKey()
       .once("value")
       .then((snapshot) => {
         // search through all child for matched roomId
-        var isEnteredRoom = false;
         snapshot.forEach((childSnapShot) => {
           var key = childSnapShot.key;
           if (key.substr(key.length - 6, key.length - 1) === roomId) {
@@ -199,7 +212,10 @@ export default ({ children, store }) => {
               // switch joinable to false after a player is joined
               // change state to render joined room
               childSnapShot.ref
-                .update({ joinable: false })
+                .update({
+                  joinable: false,
+                  visitorDisplayName: visitorDisplayName,
+                })
                 .then(() => {
                   dispatch(
                     setRoomInfo({
@@ -227,10 +243,6 @@ export default ({ children, store }) => {
             }
           }
         });
-        if (!isEnteredRoom) {
-          console.log("cannot find roomId");
-          dispatch(setRoomError({ error: "Cannot find room" }));
-        }
       });
   }
 
@@ -244,21 +256,17 @@ export default ({ children, store }) => {
     winSide,
   }) {
     const createMatchedGame = () => {
-      firebase.database
-        .ref()
-        .once("value")
-        .then((snapshot) => {
-          firebase.database.ref("/matchedGame").update({
-            [key]: {
-              roomId: roomId,
-              player1: displayName,
-              player2: opponentDisplayName,
-              chests: chests,
-              side: side,
-              winSide: winSide,
-            },
-          });
-        });
+      firebase.database.ref("/matchedGame").update({
+        [key]: {
+          roomId: roomId,
+          player1: displayName,
+          player2: opponentDisplayName,
+          playerLeft: false,
+          chests: chests,
+          side: side,
+          winSide: winSide,
+        },
+      });
     };
     firebase.database
       .ref("/unmatch/" + key)
@@ -267,6 +275,29 @@ export default ({ children, store }) => {
         createMatchedGame();
       })
       .catch((_) => dispatch(setRoomError({ error: "Cannot delete node" })));
+  }
+
+  // remove matched game after both player left the tab
+  function removeMatchedNode({ key }) {
+    firebase.database
+      .ref("/matchedGame/" + key + "/playerLeft")
+      .once("value", (snapshot) => {
+        if (snapshot.val() === true) {
+          // delete node if another player has left
+          firebase.database
+            .ref("/matchedGame/" + key)
+            .remove()
+            .then(() => console.log("successfully deleted node"))
+            .catch((_) =>
+              dispatch(setRoomError({ error: "Cannot delete node" }))
+            );
+        } else {
+          // turn indicator true when the first player left
+          firebase.database
+            .ref("/matchedGame/" + key)
+            .update({ playerLeft: true });
+        }
+      });
   }
 
   return (

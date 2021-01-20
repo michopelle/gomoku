@@ -27,10 +27,14 @@ const RoomInterface = ({
   const onDisplayNameSubmit = (values) => {
     setDisplayName(values.displayName);
     api.setUnmatchNode({ displayName: values.displayName });
+    api.visitorJoinListener({ key: roomInfo.key });
   };
 
   const onRoomIdSubmit = (values) => {
-    api.findRoomId({ roomId: values.roomId });
+    api.visitorJoinViaRoomId({
+      roomId: values.roomId,
+      visitorDisplayName: displayName,
+    });
   };
 
   const onGameStart = () => {
@@ -57,15 +61,15 @@ const RoomInterface = ({
   return !displayName && !roomInfo.key ? (
     // before display name is entered
     <>
-      <div className="card" style={{ width: "18rem" }}>
-        <div className="card-body">
-          <h5 className="card-title">Gomoku</h5>
+      <div className="card">
+        <div className="card-body ">
+          <p className="title">Gomoku</p>
           <p className="card-text">Play with your friend at any time</p>
         </div>
       </div>
-      <div className="card" style={{ width: "18rem" }}>
+      <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Please enter a display name</h5>
+          <p className="subtitle">Please enter a display name</p>
           <Form
             onSubmit={onDisplayNameSubmit}
             // form, values, errors can be used in the props below (react-final-form)
@@ -84,10 +88,10 @@ const RoomInterface = ({
   ) : roomInfo.host ? (
     // player is the host
     <>
-      <div className="card" style={{ width: "18rem" }}>
+      <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Game Lobby</h5>
-          <p className="card-text">Room id: {roomInfo.roomId}</p>
+          <p className="title">Game Lobby</p>
+          <p className="subtitle">Room id: {roomInfo.roomId}</p>
           <ul className="list-group">
             <li className="list-group-item d-flex justify-content-between align-items-center">
               {displayName}
@@ -109,9 +113,9 @@ const RoomInterface = ({
         </div>
       </div>
 
-      <div className="card" style={{ width: "18rem" }}>
+      <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Join another room</h5>
+          <p className="subtitle">Join another room</p>
           <Form
             onSubmit={onRoomIdSubmit}
             // form, values, errors can be used in the props below (react-final-form)
@@ -132,9 +136,9 @@ const RoomInterface = ({
   ) : (
     // player is a visitor
     <>
-      <div className="card" style={{ width: "18rem" }}>
+      <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Game Lobby</h5>
+          <p className="title">Game Lobby</p>
           <p className="card-text">Room id: {roomInfo.roomId}</p>
 
           <ul className="list-group">

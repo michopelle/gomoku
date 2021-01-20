@@ -8,13 +8,22 @@ import { setDisplayName } from "../../store/actions/index";
 
 const LandingPage = ({ api, store, roomInfo }) => {
   window.addEventListener("unload", (event) => {
-    console.log("calling event listener to remove unmatch node");
-    api.removeUnmatchNode({ key: roomInfo.key });
+    if (roomInfo.isGameStarted === false) {
+      console.log("calling event listener to remove unmatch node");
+      api.removeUnmatchNode({ key: roomInfo.key });
+    } else {
+      console.log("calling event listener to remove matched node");
+      api.removeMatchedNode({ key: roomInfo.key });
+    }
   });
 
   return (
     <div className="" id="landingPage">
-      <div className="" id="gamePlayInterface">
+      <div
+        className=""
+        id="gamePlayInterface"
+        style={{ opacity: roomInfo.isGameStarted === false ? 0.3 : 1 }}
+      >
         <GamePlayInterface api={api} store={store} />
       </div>
       <div className="" id="roomInterface">

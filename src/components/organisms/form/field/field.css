@@ -1,7 +1,27 @@
-#displayNameInput {
-  width: 150px;
-}
-
 #submitButton {
   margin-left: 10%;
+}
+
+#displayNameInput {
+  font: 400 13.3333px Arial;
+  width: 150px;
+  margin-right: 10%;
+}
+
+@media only screen and (max-width: 768px) {
+  .displayNameInputDiv {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+  }
+}
+
+span {
+  color: red;
+  font-size: 13.3333px;
+}
+
+.btn {
+  border-radius: 5px;
+  padding: 0.12rem 0.3rem;
 }

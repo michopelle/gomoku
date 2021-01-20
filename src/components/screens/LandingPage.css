@@ -9,6 +9,7 @@
 }
 
 @media only screen and (max-width: 768px) {
+  /* screen when the size is mode mode */
   #landingPage {
     display: flex;
     flex-direction: column-reverse;

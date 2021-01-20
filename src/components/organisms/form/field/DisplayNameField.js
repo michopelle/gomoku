@@ -15,7 +15,7 @@ export const DisplayNameField = () => {
       validate={composeValidators(required, containSpecialCharacters)}
     >
       {({ input, meta }) => (
-        <div>
+        <div className="displayNameInputDiv">
           <input
             id="displayNameInput"
             {...input}
