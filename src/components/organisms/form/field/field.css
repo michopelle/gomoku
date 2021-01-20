@@ -2,18 +2,20 @@
   margin-left: 10%;
 }
 
-#displayNameInput {
-  font: 400 13.3333px Arial;
-  width: 150px;
-  margin-right: 10%;
-}
-
 @media only screen and (max-width: 768px) {
   .displayNameInputDiv {
     display: flex;
     flex-direction: row;
-    margin-bottom: 10px;
   }
+  #displayNameInput {
+    font: 400 13.3333px Arial;
+    width: 150px;
+    margin-right: 10%;
+  }
+}
+
+.displayNameInputDiv {
+  margin-bottom: 10px;
 }
 
 span {

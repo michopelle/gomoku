@@ -97,12 +97,19 @@ const RoomInterface = ({
               {displayName}
               <span className="badge bg-primary rounded-pill">host</span>
             </li>
-            <li
-              className="list-group-item d-flex justify-content-between align-items-center"
-              id="waitingPlayer"
-            >
-              Waiting player
-            </li>
+            {roomInfo.opponentDisplayName ? (
+              <li className="list-group-item d-flex justify-content-between align-items-center">
+                {roomInfo.opponentDisplayName}
+                <span className="badge bg-primary rounded-pill">host</span>
+              </li>
+            ) : (
+              <li
+                className="list-group-item d-flex justify-content-between align-items-center"
+                id="waitingPlayer"
+              >
+                Waiting player
+              </li>
+            )}
           </ul>
 
           {/* for game start button */}
