@@ -6,7 +6,12 @@ import "firebase/auth";
 import "firebase/database";
 import { useDispatch } from "react-redux";
 
-import { updateData, setRoomInfo, setRoomError } from "../store/actions/";
+import {
+  gameInit,
+  setRoomInfo,
+  setRoomError,
+  updateData,
+} from "../store/actions/";
 
 // we create a React Context, for this to be accessible
 // from a component later
@@ -37,14 +42,12 @@ export default ({ children, store }) => {
       api: {
         uploadReducers,
         downloadReducers,
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        onAuthStateChanged,
         setUnmatchNode,
         visitorJoinListener,
         removeUnmatchNode,
         visitorJoinViaRoomId,
         startGame,
+        activateVisitorBoard,
         removeMatchedNode,
       },
 
@@ -52,46 +55,6 @@ export default ({ children, store }) => {
 
       user: user,
     };
-  }
-
-  function createUserWithEmailAndPassword(email, password, username) {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((username) => {
-        signInWithEmailAndPassword(email, password, username);
-      });
-  }
-
-  function signInWithEmailAndPassword(email, password) {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        onAuthStateChanged();
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
-  }
-
-  function onAuthStateChanged() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        var name = user.displayName;
-        console.log("logined name", user);
-        // console.log("name:", name);
-        // console.log("user:", user);
-        // console.log("user.Displayname:", user.displayName);
-        // console.log("user.email:", user.email);
-        // console.log("username:", username);
-        // dispatch(SetAuthUserAndUploadReducers(username, uploadReducers));
-      } else {
-        // no user is signed in
-      }
-    });
   }
 
   // fromStore
@@ -119,13 +82,6 @@ export default ({ children, store }) => {
       firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
         if (snapshot.val()) {
           const { chests, side, winSide } = snapshot.val();
-          console.log(
-            "download reducers if",
-            "/matchedGame/" + key,
-            chests,
-            side,
-            winSide
-          );
           dispatch(updateData(chests, side, winSide));
         }
       });
@@ -134,7 +90,7 @@ export default ({ children, store }) => {
   // downloadReducers();
 
   function setUnmatchNode({ displayName }) {
-    // Get a key for a new Post.
+    // Get a key for a new player input display name.
     var newUnmatchKey = firebase.database.ref("/unmatch/").push().key;
 
     firebase.database
@@ -148,6 +104,7 @@ export default ({ children, store }) => {
         joinable: true,
       })
       .then(() => {
+        visitorJoinListener({ key: newUnmatchKey });
         console.log(
           "success",
           newUnmatchKey,
@@ -168,6 +125,7 @@ export default ({ children, store }) => {
             key: newUnmatchKey,
             host: true,
             opponentDisplayName: null,
+            isGameStarted: false,
           })
         );
       })
@@ -177,11 +135,18 @@ export default ({ children, store }) => {
   }
 
   function visitorJoinListener({ key }) {
-    firebase.database.ref("/unmatch" + key).on("value", (snapshot) => {
+    console.log("from firebase visitor join function", key);
+    firebase.database.ref("/unmatch/" + key).on("value", (snapshot) => {
       if (snapshot.val()) {
+        const { roomId, visitorDisplayName } = snapshot.val();
+        console.log("from firebase visitor join function inside if");
         dispatch(
           setRoomInfo({
-            opponentDisplayName: snapshot.val().visitorDisplayName,
+            roomId: roomId,
+            key: key,
+            host: true,
+            opponentDisplayName: visitorDisplayName,
+            isGameStarted: false,
           })
         );
       }
@@ -217,6 +182,8 @@ export default ({ children, store }) => {
                   visitorDisplayName: visitorDisplayName,
                 })
                 .then(() => {
+                  console.log("key is changed", childSnapShot.key);
+                  activateVisitorBoard({ key: childSnapShot.key });
                   dispatch(
                     setRoomInfo({
                       roomId: childSnapShot.child("roomId").val(),
@@ -225,6 +192,7 @@ export default ({ children, store }) => {
                       opponentDisplayName: childSnapShot
                         .child("displayName")
                         .val(),
+                      isGameStarted: false,
                     })
                   );
                   return;
@@ -275,6 +243,17 @@ export default ({ children, store }) => {
         createMatchedGame();
       })
       .catch((_) => dispatch(setRoomError({ error: "Cannot delete node" })));
+  }
+
+  function activateVisitorBoard({ key }) {
+    console.log("activateVisitorBoard is called", key);
+    firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
+      if (snapshot.val()) {
+        console.log("from visitorlistener snapshot.val", snapshot.val());
+        dispatch(gameInit());
+        downloadReducers({ key });
+      }
+    });
   }
 
   // remove matched game after both player left the tab

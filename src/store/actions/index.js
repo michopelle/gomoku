@@ -74,7 +74,13 @@ export const setDisplayName = (displayName) => {
   };
 };
 
-export const setRoomInfo = ({ roomId, key, host, opponentDisplayName }) => {
+export const setRoomInfo = ({
+  roomId,
+  key,
+  host,
+  opponentDisplayName,
+  isGameStarted,
+}) => {
   return {
     type: "SET_ROOM_INFO",
     payload: {
@@ -82,6 +88,7 @@ export const setRoomInfo = ({ roomId, key, host, opponentDisplayName }) => {
       key: key,
       host: host,
       opponentDisplayName: opponentDisplayName,
+      isGameStarted: isGameStarted,
     },
   };
 };

@@ -10,16 +10,25 @@ export default (
 ) => {
   switch (action.type) {
     case "SET_ROOM_INFO":
-      const { roomId, key, host, opponentDisplayName } = action.payload;
+      console.log("set froom info");
+      const {
+        roomId,
+        key,
+        host,
+        opponentDisplayName,
+        isGameStarted,
+      } = action.payload;
       return {
         ...state,
         roomId: roomId,
         key: key,
         host: host,
         opponentDisplayName: opponentDisplayName,
+        isGameStarted: isGameStarted,
       };
 
     case "GAME_INIT":
+      console.log("game init");
       return {
         ...state,
         isGameStarted: true,

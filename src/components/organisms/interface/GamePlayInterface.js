@@ -2,10 +2,6 @@ import React from "react";
 
 import "./gamePlayInterface.css";
 import Board from "../../Board";
-import Reset from "../../Reset";
-import UndoRedo from "../../../containers/UndoRedo";
-// import "../../App.css";
-import WinSide from "../../WinSide";
 
 const GamePlayInterface = ({ api, store }) => {
   const renderedList = () => {
@@ -14,9 +10,6 @@ const GamePlayInterface = ({ api, store }) => {
         <div className="Board" id="board">
           <Board store={store} api={api} />
         </div>
-        <UndoRedo />
-        <Reset store={store} api={api} />
-        <WinSide />
       </>
     );
   };

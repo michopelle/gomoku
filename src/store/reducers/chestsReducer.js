@@ -11,6 +11,7 @@ for (let i = 0; i < 15; i++) {
 const chests = (state = initialState, action) => {
   switch (action.type) {
     case "CHEST_MOVE":
+      console.log("chest move is pressed", action.payload);
       const { positionX, positionY, side } = action.payload;
 
       return state.map((el, index) =>
@@ -20,6 +21,7 @@ const chests = (state = initialState, action) => {
       );
 
     case "UPDATE_FROM_FIREBASE":
+      console.log("chest move is updated from db", action.payload);
       return action.payload.chests.present;
     // const { present } = action.payload.move;
     // console.log("present", present);

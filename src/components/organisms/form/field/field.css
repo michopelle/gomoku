@@ -10,8 +10,12 @@
   #displayNameInput {
     font: 400 13.3333px Arial;
     width: 150px;
-    margin-right: 10%;
+    margin-right: 5%;
   }
+}
+
+#displayNameInput {
+  margin-right: 5%;
 }
 
 .displayNameInputDiv {

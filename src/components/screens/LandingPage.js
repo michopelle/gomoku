@@ -18,11 +18,11 @@ const LandingPage = ({ api, store, roomInfo }) => {
   });
 
   return (
-    <div className="" id="landingPage">
+    <div className="clearfix" id="landingPage">
       <div
         className=""
         id="gamePlayInterface"
-        style={{ opacity: roomInfo.isGameStarted === false ? 0.3 : 1 }}
+        style={{ opacity: roomInfo.isGameStarted === true ? 1 : 0.3 }}
       >
         <GamePlayInterface api={api} store={store} />
       </div>

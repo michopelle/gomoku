@@ -12,6 +12,9 @@ import {
   SubmitButton,
 } from "../form/";
 import ShowRoomErrorModal from "../modal/ShowRoomErrorModal";
+import Reset from "../../Reset";
+import UndoRedo from "../../../containers/UndoRedo";
+import WinSide from "../../WinSide";
 
 const RoomInterface = ({
   api,
@@ -24,10 +27,10 @@ const RoomInterface = ({
   resetChest,
   setDisplayName,
 }) => {
+  console.log("roominfo", roomInfo);
   const onDisplayNameSubmit = (values) => {
     setDisplayName(values.displayName);
     api.setUnmatchNode({ displayName: values.displayName });
-    api.visitorJoinListener({ key: roomInfo.key });
   };
 
   const onRoomIdSubmit = (values) => {
@@ -35,6 +38,9 @@ const RoomInterface = ({
       roomId: values.roomId,
       visitorDisplayName: displayName,
     });
+    // const { key } = roomInfo;
+    // console.log("from roominterface roomid submit");
+    // api.activateVisitorBoard({ key });
   };
 
   const onGameStart = () => {
@@ -46,6 +52,7 @@ const RoomInterface = ({
     // inform database for starting game
     const { roomId, key, opponentDisplayName } = roomInfo;
     const { chests, side, winSide } = store.getState();
+    // create matched game in firebase
     api.startGame({
       roomId: roomId,
       key: key,
@@ -55,6 +62,7 @@ const RoomInterface = ({
       side: side,
       winSide: winSide,
     });
+    // add listener to the matched game node
     api.downloadReducers({ key });
   };
 
@@ -100,7 +108,6 @@ const RoomInterface = ({
             {roomInfo.opponentDisplayName ? (
               <li className="list-group-item d-flex justify-content-between align-items-center">
                 {roomInfo.opponentDisplayName}
-                <span className="badge bg-primary rounded-pill">host</span>
               </li>
             ) : (
               <li
@@ -139,6 +146,9 @@ const RoomInterface = ({
       </div>
 
       <ShowRoomErrorModal />
+      <UndoRedo />
+      <Reset store={store} api={api} />
+      <WinSide />
     </>
   ) : (
     // player is a visitor
@@ -159,6 +169,9 @@ const RoomInterface = ({
           </ul>
         </div>
       </div>
+      <UndoRedo />
+      <Reset store={store} api={api} />
+      <WinSide />
     </>
   );
 };

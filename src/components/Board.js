@@ -5,20 +5,28 @@ import "./Board.css";
 import { chestMoveAndWinSide } from "../store/actions/";
 
 const Board = ({ store, api, chests, roomInfo, side, winSide, chestMove }) => {
+  // console.log('from board', )
   const onChestClick = (_, chestListIndex, chestIndex) => {
+    console.log("onchestclick called: roomifo", roomInfo.host, ", side", side);
     // Disable onClick if there is a winner
-    if (!winSide) {
-      chestMove(
-        chestListIndex, // positionX
-        chestIndex, // positionY
-        side
-      );
+    if (
+      (roomInfo.host === true && side === "black") ||
+      (roomInfo.host === false && side === "white")
+    ) {
+      if (!winSide) {
+        console.log("infor passed to chest ", chestListIndex, chestIndex, side);
+        chestMove(
+          chestListIndex, // positionX
+          chestIndex, // positionY
+          side
+        );
+        api.uploadReducers(store.getState());
+      }
     }
     // upload to firebase
-    api.uploadReducers(store.getState());
   };
 
-  // Render the Board based on the
+  // Render the Board if the game is started
   const renderedList = () => {
     return roomInfo.isGameStarted
       ? chests.map((chestList, chestListIndex) => {

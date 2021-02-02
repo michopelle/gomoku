@@ -4,10 +4,10 @@ import "./field/field.css";
 import "./formStyle.css";
 
 export const StartButton = ({ onClick, opponentDisplayName }) => {
-  console.log(
-    "from start button",
-    `startButton${opponentDisplayName ? "Disabled" : ""}`
-  );
+  // console.log(
+  //   "from start button",
+  //   `startButton${opponentDisplayName ? "Disabled" : ""}`
+  // );
   return (
     <div className="buttons">
       <button
