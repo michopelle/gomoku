@@ -1,14 +1,26 @@
-.Board {
-  width: 750px !important;
-  height: 750px !important;
-  background-image: url("../assets/Board.jpg");
-  background-size: 100%;
+* {
+  /* the padding and border are included in the total width and height of the elements */
+  /* https://www.w3schools.com/css/css3_box-sizing.asp */
+  box-sizing: border-box;
 }
 
-img {
-  max-width: 80%;
+.wrapper {
+  background-image: url("../assets/background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 50px;
+  padding-bottom: 25px;
 }
 
-.col {
-  padding: 0;
+.body {
+  max-width: 1200px;
+  /* background-color: pink; */
+  margin: 0 auto;
+  flex: 1 0 auto;
+}
+
+.footer {
+  max-width: 1200px;
+  padding-top: 25px;
+  margin: 0 auto;
 }

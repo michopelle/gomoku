@@ -64,3 +64,46 @@ const SetAuthUser = (authUser) => {
     },
   };
 };
+
+export const setDisplayName = (displayName) => {
+  return {
+    type: "SET_DISPLAY_NAME",
+    payload: {
+      displayName: displayName,
+    },
+  };
+};
+
+export const setRoomInfo = ({
+  roomId,
+  key,
+  host,
+  opponentDisplayName,
+  isGameStarted,
+}) => {
+  return {
+    type: "SET_ROOM_INFO",
+    payload: {
+      roomId: roomId,
+      key: key,
+      host: host,
+      opponentDisplayName: opponentDisplayName,
+      isGameStarted: isGameStarted,
+    },
+  };
+};
+
+export const gameInit = () => {
+  return {
+    type: "GAME_INIT",
+  };
+};
+
+export const setRoomError = ({ error }) => {
+  return {
+    type: "SET_ROOM_ERROR",
+    payload: {
+      error: error,
+    },
+  };
+};

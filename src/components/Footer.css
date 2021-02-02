@@ -1,0 +1,30 @@
+.Footer {
+  display: grid;
+  flex-flow: row nowrap;
+  border-top: grey 1px solid;
+  margin: 20px 50px;
+  /* max-width: 1200px; */
+  /* justify-items: stretch; */
+  grid-template-columns: 1fr 1fr;
+  padding-top: 5px;
+}
+
+.contactMe p {
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.contactMe a {
+  font-weight: 200;
+  color: black;
+}
+
+.production {
+  display: flex;
+}
+
+.production p {
+  flex: 1 0 auto;
+  text-align: end;
+  /* margin-bottom: 0; */
+}

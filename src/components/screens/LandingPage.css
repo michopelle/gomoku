@@ -1,0 +1,59 @@
+#landingPage {
+  width: 1200;
+  display: flex;
+  margin: 0 50px;
+}
+
+#gamePlayInterface {
+  border-right-style: solid;
+  text-align: center;
+  overflow: hidden;
+  /* flex: 'flex-grow' 'flex-shrink' 'flex-basic' */
+  flex: 1 0 auto;
+}
+
+#roomInterface {
+  float: left;
+  /* flex: 'flex-grow' 'flex-shrink' 'flex-basic' */
+  flex: 0 1 18rem;
+}
+
+@media only screen and (max-width: 768px) {
+  /* screen when the size is mode mode */
+  #landingPage {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  #gamePlayInterface {
+    /* background-color: purple; */
+    width: 100%;
+    justify-content: center;
+  }
+  #roomInterface {
+    /* background-color: pink; */
+    width: 100%;
+  }
+}
+
+/* below is the fix of 0 parent height */
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+/* .clearfix {
+  display: inline-block;
+} */
+
+html[xmlns] .clearfix {
+  display: block;
+}
+
+* html .clearfix {
+  height: 1%;
+}
+/* end of the fix of 0 parent height */

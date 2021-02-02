@@ -1,6 +1,7 @@
 import React from "react";
 import { Field } from "react-final-form";
 
+import "./field.css";
 import {
   composeValidators,
   required,
@@ -14,9 +15,13 @@ export const DisplayNameField = () => {
       validate={composeValidators(required, containSpecialCharacters)}
     >
       {({ input, meta }) => (
-        <div>
-          <label>Display Name</label>
-          <input {...input} type="text" placeholder="Display Name" />
+        <div className="displayNameInputDiv">
+          <input
+            id="displayNameInput"
+            {...input}
+            type="text"
+            placeholder="Display Name"
+          />
           {meta.error && meta.touched && <span>{meta.error}</span>}
         </div>
       )}

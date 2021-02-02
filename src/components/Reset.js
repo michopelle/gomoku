@@ -4,12 +4,12 @@ import { ActionCreators as UndoActionCreators } from "redux-undo";
 
 import { resetChest } from "../store/actions/";
 
-const Reset = ({ store, api, database, resetChest, onClearHistory }) => {
+const Reset = ({ store, api, resetChest, onClearHistory }) => {
   const onResetClick = () => {
     resetChest();
     onClearHistory();
     // upload to firebase
-    api.uploadReducers(store.getState(), database);
+    api.uploadReducers(store.getState());
   };
 
   return <button onClick={() => onResetClick()}>Reset</button>;

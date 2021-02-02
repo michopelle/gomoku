@@ -24,7 +24,15 @@ export const contain8Characters = (value) => {
   return value
     ? value.length > 7
       ? undefined
-      : "Should contain at least 8 charactiers"
+      : "Should contain at least 8 characters"
+    : undefined;
+};
+
+export const contain6Characters = (value) => {
+  return value
+    ? value.length === 6
+      ? undefined
+      : "Should contain 6 characters"
     : undefined;
 };
 

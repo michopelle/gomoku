@@ -1,13 +1,50 @@
 import React from "react";
+import { connect } from "react-redux";
 
-const LandingPage = () => {
+import "./LandingPage.css";
+import GamePlayInterface from "../organisms/interface/GamePlayInterface";
+import RoomInterface from "../organisms/interface/RoomInterface";
+import { setDisplayName } from "../../store/actions/index";
+
+const LandingPage = ({ api, store, roomInfo }) => {
+  window.addEventListener("unload", (event) => {
+    if (roomInfo.isGameStarted === false) {
+      console.log("calling event listener to remove unmatch node");
+      api.removeUnmatchNode({ key: roomInfo.key });
+    } else {
+      console.log("calling event listener to remove matched node");
+      api.removeMatchedNode({ key: roomInfo.key });
+    }
+  });
+
   return (
-    <div>
-      <h1>Welcome to My Awesome App</h1>
-      <div id="firebaseui-auth-container"></div>
-      <div id="loader">Loading...</div>
+    <div className="clearfix" id="landingPage">
+      <div
+        className=""
+        id="gamePlayInterface"
+        style={{ opacity: roomInfo.isGameStarted === true ? 1 : 0.3 }}
+      >
+        <GamePlayInterface api={api} store={store} />
+      </div>
+      <div className="" id="roomInterface">
+        <RoomInterface api={api} store={store} />
+      </div>
     </div>
   );
 };
 
-export default LandingPage;
+const mapStateToProps = (state) => {
+  return {
+    displayName: state.displayName,
+    roomInfo: state.roomInfo,
+    roomError: state.roomError,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setDisplayName: (displayName) => dispatch(setDisplayName(displayName)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);

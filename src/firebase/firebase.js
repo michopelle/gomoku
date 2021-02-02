@@ -6,14 +6,19 @@ import "firebase/auth";
 import "firebase/database";
 import { useDispatch } from "react-redux";
 
-import { updateData, SetAuthUserAndUploadReducers } from "../store/actions/";
+import {
+  gameInit,
+  setRoomInfo,
+  setRoomError,
+  updateData,
+} from "../store/actions/";
 
 // we create a React Context, for this to be accessible
 // from a component later
 const FirebaseContext = createContext(null);
 export { FirebaseContext };
 
-export default ({ children }) => {
+export default ({ children, store }) => {
   let firebase = {
     app: null,
     database: null,
@@ -37,9 +42,13 @@ export default ({ children }) => {
       api: {
         uploadReducers,
         downloadReducers,
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        onAuthStateChanged,
+        setUnmatchNode,
+        visitorJoinListener,
+        removeUnmatchNode,
+        visitorJoinViaRoomId,
+        startGame,
+        activateVisitorBoard,
+        removeMatchedNode,
       },
 
       auth: auth,
@@ -48,48 +57,13 @@ export default ({ children }) => {
     };
   }
 
-  function createUserWithEmailAndPassword(email, password, username) {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((username) => {
-        signInWithEmailAndPassword(email, password, username);
-        // this.props.firebase.api.uploadReducers();
-        // this.props.history.push(routes.LANDING);
-      });
-  }
-
-  function signInWithEmailAndPassword(email, password, username) {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        onAuthStateChanged(username);
-      });
-  }
-
-  function onAuthStateChanged(username) {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        var name = user.displayName;
-        // console.log("name:", name);
-        // console.log("user:", user);
-        // console.log("user.Displayname:", user.displayName);
-        // console.log("user.email:", user.email);
-        // console.log("username:", username);
-        dispatch(SetAuthUserAndUploadReducers(username, uploadReducers));
-      }
-    });
-  }
-
   // fromStore
-  function uploadReducers({ authUser, chests, side, winSide }) {
+  function uploadReducers({ roomInfo, chests, side, winSide }) {
     // call this function whenever sth has to be updated to Firebase
     // the ref() can be used to input the corresponding node name in Firebase
     firebase.database
-      .ref()
-      .set({
-        authUser: authUser,
+      .ref("/matchedGame/" + roomInfo.key)
+      .update({
         chests: chests,
         side: side,
         winSide: winSide,
@@ -101,17 +75,209 @@ export default ({ children }) => {
   }
 
   // fromDb
-  function downloadReducers(db) {
+  function downloadReducers({ key }) {
     // This method is triggered once when the listener is attached
     // and again every time the data, including children, changes.
-    db.ref().on("value", (snapshot) => {
+    if (key) {
+      firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
+        if (snapshot.val()) {
+          const { chests, side, winSide } = snapshot.val();
+          dispatch(updateData(chests, side, winSide));
+        }
+      });
+    }
+  }
+  // downloadReducers();
+
+  function setUnmatchNode({ displayName }) {
+    // Get a key for a new player input display name.
+    var newUnmatchKey = firebase.database.ref("/unmatch/").push().key;
+
+    firebase.database
+      .ref("/unmatch/" + newUnmatchKey)
+      .update({
+        displayName: displayName,
+        roomId: newUnmatchKey.substr(
+          newUnmatchKey.length - 6,
+          newUnmatchKey.length - 1
+        ),
+        joinable: true,
+      })
+      .then(() => {
+        visitorJoinListener({ key: newUnmatchKey });
+        console.log(
+          "success",
+          newUnmatchKey,
+          newUnmatchKey.substr(
+            newUnmatchKey.length - 6,
+            newUnmatchKey.length - 1
+          ),
+          newUnmatchKey.length
+        );
+
+        // change redux for hosting new room
+        dispatch(
+          setRoomInfo({
+            roomId: newUnmatchKey.substr(
+              newUnmatchKey.length - 6,
+              newUnmatchKey.length - 1
+            ),
+            key: newUnmatchKey,
+            host: true,
+            opponentDisplayName: null,
+            isGameStarted: false,
+          })
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function visitorJoinListener({ key }) {
+    console.log("from firebase visitor join function", key);
+    firebase.database.ref("/unmatch/" + key).on("value", (snapshot) => {
       if (snapshot.val()) {
-        const { chests, side, winSide } = snapshot.val();
-        dispatch(updateData(chests, side, winSide));
+        const { roomId, visitorDisplayName } = snapshot.val();
+        console.log("from firebase visitor join function inside if");
+        dispatch(
+          setRoomInfo({
+            roomId: roomId,
+            key: key,
+            host: true,
+            opponentDisplayName: visitorDisplayName,
+            isGameStarted: false,
+          })
+        );
       }
     });
   }
-  downloadReducers(firebase.database, dispatch);
+
+  function removeUnmatchNode({ key }) {
+    firebase.database
+      .ref("/unmatch/" + key)
+      .remove()
+      .then(() => console.log("successfully deleted node"))
+      .catch((_) => dispatch(setRoomError({ error: "Cannot delete node" })));
+  }
+
+  function visitorJoinViaRoomId({ roomId, visitorDisplayName }) {
+    firebase.database
+      .ref("/unmatch")
+      .orderByKey()
+      .once("value")
+      .then((snapshot) => {
+        // search through all child for matched roomId
+        snapshot.forEach((childSnapShot) => {
+          var key = childSnapShot.key;
+          if (key.substr(key.length - 6, key.length - 1) === roomId) {
+            if (childSnapShot.child("joinable").val() === true) {
+              console.log("childSnapShot", childSnapShot.val());
+
+              // switch joinable to false after a player is joined
+              // change state to render joined room
+              childSnapShot.ref
+                .update({
+                  joinable: false,
+                  visitorDisplayName: visitorDisplayName,
+                })
+                .then(() => {
+                  console.log("key is changed", childSnapShot.key);
+                  activateVisitorBoard({ key: childSnapShot.key });
+                  dispatch(
+                    setRoomInfo({
+                      roomId: childSnapShot.child("roomId").val(),
+                      key: childSnapShot.key,
+                      host: false,
+                      opponentDisplayName: childSnapShot
+                        .child("displayName")
+                        .val(),
+                      isGameStarted: false,
+                    })
+                  );
+                  return;
+                })
+                .catch((_) => {
+                  dispatch(
+                    setRoomError({
+                      error: "There is some error in joining the room",
+                    })
+                  );
+                  return;
+                });
+            } else {
+              dispatch(setRoomError({ error: "The room is not joinable" }));
+              return;
+            }
+          }
+        });
+      });
+  }
+
+  function startGame({
+    roomId,
+    key,
+    displayName,
+    opponentDisplayName,
+    chests,
+    side,
+    winSide,
+  }) {
+    const createMatchedGame = () => {
+      firebase.database.ref("/matchedGame").update({
+        [key]: {
+          roomId: roomId,
+          player1: displayName,
+          player2: opponentDisplayName,
+          playerLeft: false,
+          chests: chests,
+          side: side,
+          winSide: winSide,
+        },
+      });
+    };
+    firebase.database
+      .ref("/unmatch/" + key)
+      .remove()
+      .then(() => {
+        createMatchedGame();
+      })
+      .catch((_) => dispatch(setRoomError({ error: "Cannot delete node" })));
+  }
+
+  function activateVisitorBoard({ key }) {
+    console.log("activateVisitorBoard is called", key);
+    firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
+      if (snapshot.val()) {
+        console.log("from visitorlistener snapshot.val", snapshot.val());
+        dispatch(gameInit());
+        downloadReducers({ key });
+      }
+    });
+  }
+
+  // remove matched game after both player left the tab
+  function removeMatchedNode({ key }) {
+    firebase.database
+      .ref("/matchedGame/" + key + "/playerLeft")
+      .once("value", (snapshot) => {
+        if (snapshot.val() === true) {
+          // delete node if another player has left
+          firebase.database
+            .ref("/matchedGame/" + key)
+            .remove()
+            .then(() => console.log("successfully deleted node"))
+            .catch((_) =>
+              dispatch(setRoomError({ error: "Cannot delete node" }))
+            );
+        } else {
+          // turn indicator true when the first player left
+          firebase.database
+            .ref("/matchedGame/" + key)
+            .update({ playerLeft: true });
+        }
+      });
+  }
 
   return (
     <FirebaseContext.Provider value={firebase}>

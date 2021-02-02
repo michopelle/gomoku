@@ -1,0 +1,60 @@
+span {
+  color: #000000;
+  font-size: 50px;
+}
+
+@media only screen and (min-width: 768px) {
+  .card {
+    /* width: 18rem; */
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .card-body {
+    padding: 5px 10px;
+  }
+  .title {
+    margin-bottom: 0.3rem;
+  }
+}
+
+.title {
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 1.25rem;
+}
+
+.subtitle {
+  text-align: left;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+#formDisplayName {
+  display: flex;
+  flex-direction: column;
+}
+
+.roomInfo {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.roomIdInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#waitingPlayer {
+  color: grey;
+}
+
+.bg-primary {
+  background-color: grey !important;
+  color: black;
+}
