@@ -10,7 +10,6 @@ import LandingPage from "./screens/LandingPage";
 // replace (_) with (firebase) when necessary
 const App = (_) => {
   return (
-    // <div className="pageWrapper">
     <div className="wrapper">
       <div className="body">
         <BrowserRouter>
@@ -27,7 +26,6 @@ const App = (_) => {
         <Footer />
       </div>
     </div>
-    // </div>
   );
 };
 
