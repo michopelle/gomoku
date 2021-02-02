@@ -15,9 +15,6 @@ const GamePlayInterface = ({ api, store }) => {
   };
 
   return renderedList();
-  // <div className="container">
-  //   <div className="table table-borderless">{renderedList()}</div>
-  // </div>
 };
 
 export default GamePlayInterface;
