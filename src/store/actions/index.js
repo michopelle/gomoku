@@ -42,6 +42,7 @@ export const updateData = (chests, side, winSide) => {
 };
 
 export const resetChest = () => {
+  console.log("chest is reset");
   return {
     type: "RESET_CHEST",
   };

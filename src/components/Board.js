@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import "./Board.css";
@@ -13,15 +13,16 @@ const Board = ({ store, api, chests, roomInfo, side, winSide, chestMove }) => {
       (roomInfo.host === true && side === "black") ||
       (roomInfo.host === false && side === "white")
     ) {
-      if (!winSide) {
-        console.log("infor passed to chest ", chestListIndex, chestIndex, side);
-        chestMove(
-          chestListIndex, // positionX
-          chestIndex, // positionY
-          side
-        );
-        api.uploadReducers(store.getState());
-      }
+      // if (!winSide) {
+      console.log("infor passed to chest ", chestListIndex, chestIndex, side);
+      chestMove(
+        chestListIndex, // positionX
+        chestIndex, // positionY
+        side
+      );
+      console.log("after chest move", winSide);
+      // }
+      api.uploadReducers(store.getState());
     }
     // upload to firebase
   };
@@ -46,6 +47,7 @@ const Board = ({ store, api, chests, roomInfo, side, winSide, chestMove }) => {
                     <div
                       className="col boardCol"
                       key={(chestListIndex, chestIndex)}
+                      disabled={winSide !== false ? true : false}
                       onClick={(e) =>
                         onChestClick(e, chestListIndex, chestIndex)
                       }

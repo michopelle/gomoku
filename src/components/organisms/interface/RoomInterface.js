@@ -27,7 +27,6 @@ const RoomInterface = ({
   resetChest,
   setDisplayName,
 }) => {
-  console.log("roominfo", roomInfo);
   const onDisplayNameSubmit = (values) => {
     setDisplayName(values.displayName);
     api.setUnmatchNode({ displayName: values.displayName });

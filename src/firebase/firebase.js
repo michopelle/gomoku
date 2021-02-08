@@ -59,6 +59,7 @@ export default ({ children, store }) => {
 
   // fromStore
   function uploadReducers({ roomInfo, chests, side, winSide }) {
+    console.log("from upload reducer", roomInfo, chests, winSide);
     // call this function whenever sth has to be updated to Firebase
     // the ref() can be used to input the corresponding node name in Firebase
     firebase.database
@@ -81,6 +82,7 @@ export default ({ children, store }) => {
     if (key) {
       firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
         if (snapshot.val()) {
+          console.log("reducers downloaded from db");
           const { chests, side, winSide } = snapshot.val();
           dispatch(updateData(chests, side, winSide));
         }
@@ -105,15 +107,6 @@ export default ({ children, store }) => {
       })
       .then(() => {
         visitorJoinListener({ key: newUnmatchKey });
-        console.log(
-          "success",
-          newUnmatchKey,
-          newUnmatchKey.substr(
-            newUnmatchKey.length - 6,
-            newUnmatchKey.length - 1
-          ),
-          newUnmatchKey.length
-        );
 
         // change redux for hosting new room
         dispatch(
@@ -135,11 +128,9 @@ export default ({ children, store }) => {
   }
 
   function visitorJoinListener({ key }) {
-    console.log("from firebase visitor join function", key);
     firebase.database.ref("/unmatch/" + key).on("value", (snapshot) => {
       if (snapshot.val()) {
         const { roomId, visitorDisplayName } = snapshot.val();
-        console.log("from firebase visitor join function inside if");
         dispatch(
           setRoomInfo({
             roomId: roomId,
@@ -247,7 +238,7 @@ export default ({ children, store }) => {
 
   function activateVisitorBoard({ key }) {
     console.log("activateVisitorBoard is called", key);
-    firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
+    firebase.database.ref("/matchedGame/" + key).once("value", (snapshot) => {
       if (snapshot.val()) {
         console.log("from visitorlistener snapshot.val", snapshot.val());
         dispatch(gameInit());

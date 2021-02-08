@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import Popup from "reactjs-popup";
 
 const ShowRoomErrorModal = ({ roomError }) => {
-  console.log("from modal", roomError);
   return (
     <Popup
       // trigger={<button className="button"> Open Modal </button>}

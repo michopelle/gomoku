@@ -10,7 +10,7 @@ export default (
 ) => {
   switch (action.type) {
     case "SET_ROOM_INFO":
-      console.log("set froom info");
+      // console.log("set froom info");
       const {
         roomId,
         key,
