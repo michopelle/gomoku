@@ -37,9 +37,6 @@ const RoomInterface = ({
       roomId: values.roomId,
       visitorDisplayName: displayName,
     });
-    // const { key } = roomInfo;
-    // console.log("from roominterface roomid submit");
-    // api.activateVisitorBoard({ key });
   };
 
   const onGameStart = () => {

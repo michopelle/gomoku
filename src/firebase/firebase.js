@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import { ReactReduxContext } from "react-redux";
 import firebaseConfig from "./firebaseConfig";
 import app from "firebase/app";
@@ -19,6 +19,7 @@ const FirebaseContext = createContext(null);
 export { FirebaseContext };
 
 export default ({ children, store }) => {
+  let gameStartState = false;
   let firebase = {
     app: null,
     database: null,
@@ -237,11 +238,15 @@ export default ({ children, store }) => {
   }
 
   function activateVisitorBoard({ key }) {
-    console.log("activateVisitorBoard is called", key);
-    firebase.database.ref("/matchedGame/" + key).once("value", (snapshot) => {
+    // console.log("activateVisitorBoard is called", key);
+    firebase.database.ref("/matchedGame/" + key).on("value", (snapshot) => {
       if (snapshot.val()) {
-        console.log("from visitorlistener snapshot.val", snapshot.val());
-        dispatch(gameInit());
+        if (gameStartState === false) {
+          // console.log("game is started");
+          dispatch(gameInit());
+          gameStartState = true;
+        }
+        // console.log("in activate");
         downloadReducers({ key });
       }
     });

@@ -32,9 +32,14 @@ const checkCondition = ({ positionX, positionY, side, chests }) => {
       resultList.push(count);
     });
   });
+  console.log(
+    "winsider reducer checkCondition function, resultList",
+    resultList
+  );
   var max = resultList.reduce(function (a, b) {
     return Math.max(a, b);
   });
+  console.log("max", max);
   return max === 4 ? true : false;
 };
 
@@ -84,6 +89,11 @@ const directions = [
 export default (state = false, action) => {
   switch (action.type) {
     case "WIN_SIDE":
+      console.log("winSideReducer, WIN_SIDE case", action.payload);
+      console.log(
+        "winSideReducer, result",
+        checkCondition(action.payload) ? action.payload.side : false
+      );
       return checkCondition(action.payload) ? action.payload.side : false;
 
     case "UPDATE_FROM_FIREBASE":

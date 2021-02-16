@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 
 import "./Board.css";
 import { chestMoveAndWinSide } from "../store/actions/";
 
 const Board = ({ store, api, chests, roomInfo, side, winSide, chestMove }) => {
-  // console.log('from board', )
   const onChestClick = (_, chestListIndex, chestIndex) => {
     console.log("onchestclick called: roomifo", roomInfo.host, ", side", side);
     // Disable onClick if there is a winner
@@ -20,9 +19,14 @@ const Board = ({ store, api, chests, roomInfo, side, winSide, chestMove }) => {
         chestIndex, // positionY
         side
       );
-      console.log("after chest move", winSide);
+      console.log("after chest move, store=", store.getState());
+      // console.log("after chest move", api);
+      // console.log("after chest move", api.uploadReducers);
       // }
-      api.uploadReducers(store.getState());
+      setTimeout(function () {
+        //Start the timer
+        api.uploadReducers(store.getState());
+      }, 500);
     }
     // upload to firebase
   };

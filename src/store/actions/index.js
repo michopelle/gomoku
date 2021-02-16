@@ -1,9 +1,11 @@
+import { FirebaseContext } from "../../firebase/firebase";
+// console.log("within action", FirebaseContext);
 export const chestMoveAndWinSide = (positionX, positionY, side) => {
   return async (dispatch, getState) => {
     await dispatch(chestMove(positionX, positionY, side));
 
     const { chests } = getState();
-    dispatch(winSide(positionX, positionY, side, chests));
+    await dispatch(winSide(positionX, positionY, side, chests));
   };
 };
 
